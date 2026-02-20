@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html class="scroll-smooth dark" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>AURA | Find Your Squad</title>
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com?plugins=forms,typography,container-queries"></script>
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#8B5CF6",
+                        neon: "#00F2FF",
+                        accent: "#FBBF24",
+                        "background-dark": "#06070A",
+                    },
+                    fontFamily: {
+                        display: ["Sora", "sans-serif"],
+                        sans: ["Inter", "sans-serif"],
+                    },
+                },
+            },
+        };
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .neon-text {
+                text-shadow: 0 0 10px rgba(139, 92, 246, 0.5), 0 0 20px rgba(139, 92, 246, 0.3);
+            }
+            .neon-logo {
+                text-shadow: 0 0 8px rgba(0, 242, 255, 0.8);
+            }
+        }
+        :root {
+            --lamp-x: 0px;
+            --lamp-y: 0px;
+            --spotlight-mask: polygon(0 0, 0 0, 0 0);
+        }
+        .rope-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 50;
+            pointer-events: none;
+            overflow: visible;
+        }
+        .rope-svg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+        .lamp-interactive-area {
+            position: absolute;
+            width: 80px;
+            height: 60px;
+            cursor: grab;
+            pointer-events: auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            z-index: 60;
+            transform-origin: top center;
+            will-change: transform;
+        }
+        .lamp-interactive-area:active {
+            cursor: grabbing;
+        }
+        .lamp-handle {
+            width: 12px;
+            height: 12px;
+            background: #475569;
+            border-radius: 50%;
+            margin-bottom: -4px;
+            border: 2px solid #1e293b;
+        }
+        .lamp-head {
+            width: 72px;
+            height: 42px;
+            background: #1e293b;
+            clip-path: polygon(25% 0%, 75% 0%, 100% 100%, 0% 100%);
+            position: relative;
+            border-bottom: 4px solid #fbbf24;
+            box-shadow: 0 15px 50px rgba(251, 191, 36, 0.5);
+        }
+        .lamp-bulb-glow {
+            position: absolute;
+            bottom: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 40px;
+            height: 12px;
+            background: #fbbf24;
+            filter: blur(12px);
+            border-radius: 50%;
+        }
+        .spotlight-cone-visual {
+            position: absolute;
+            top: 42px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 1600px;
+            height: 1400px;
+            background: radial-gradient(circle at top center, rgba(251, 191, 36, 0.3) 0%, transparent 70%);
+            clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+            pointer-events: none;
+            z-index: 45;
+            opacity: 0.85;
+            transform-origin: top center;
+            will-change: transform;
+        }
+        .feature-card-wrapper {
+            position: relative;
+            overflow: hidden;
+            border-radius: 1.5rem;
+            background: rgba(15, 23, 42, 0.6);
+            height: 320px;
+        }
+        #cursor-bg {
+           position: fixed;
+           inset: 0;
+           pointer-events: none;
+           z-index: 0;
+           background: radial-gradient(
+              circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+            rgba(139, 92, 246, 0.25),
+            rgba(0, 242, 255, 0.15),
+              transparent 40%
+          );
+          transition: background 0.15s ease;
+          mix-blend-mode: screen;
+        }
+        .feature-card-dark {
+            @apply p-8 h-full border border-white/5 bg-slate-900/40 backdrop-blur-xl transition-colors duration-300;
+        }
+        .feature-card-lit {
+            position: absolute;
+            inset: 0;
+            @apply p-8 h-full bg-gradient-to-br from-amber-400 to-orange-500 text-slate-950;
+            clip-path: var(--spotlight-mask);
+            pointer-events: none;
+            z-index: 10;
+            will-change: clip-path;
+        }
+        .glass-nav {
+            background: rgba(6, 7, 10, 0.85);
+            backdrop-filter: blur(16px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+    </style>
+</head>
+
+<body class="bg-background-dark text-slate-100 font-sans antialiased overflow-x-hidden">
+    <div id="cursor-bg"></div>
+    <nav class="fixed top-0 w-full z-[100] glass-nav">
+        <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+            <div class="flex items-center gap-2">
+                <div
+                    class="w-9 h-9 bg-primary rounded-lg flex items-center justify-center text-white shadow-[0_0_15px_rgba(139,92,246,0.5)]">
+                    <span class="material-symbols-outlined font-bold text-xl">bolt</span>
+                </div>
+                <span class="font-display text-2xl font-extrabold tracking-tighter text-neon neon-logo">AURA</span>
+            </div>
+            <div
+                class="hidden md:flex items-center gap-10 text-sm font-semibold tracking-wide uppercase text-slate-400">
+                <a class="hover:text-neon transition-colors" href="#features">The Advantage</a>
+                <a class="hover:text-neon transition-colors" href="#">Squads</a>
+                <a class="hover:text-neon transition-colors" href="#">Nexus</a>
+                <a class="hover:text-neon transition-colors" href="#">Pulse</a>
+            </div>
+            <div>
+                <button
+                    class="bg-primary hover:bg-primary/80 text-white px-7 py-2.5 rounded-full font-bold transition-all shadow-[0_0_20px_rgba(139,92,246,0.3)] active:scale-95">
+                    Log In
+                </button>
+            </div>
+        </div>
+    </nav>
+    <header class="relative pt-48 pb-32 overflow-hidden">
+        <div
+            class="absolute top-0 left-1/2 -translate-x-1/2 w-[1200px] h-[600px] bg-primary/20 blur-[140px] rounded-full -z-10 opacity-50">
+        </div>
+        <div class="max-w-7xl mx-auto px-6 text-center">
+            <div
+                class="inline-block px-4 py-1.5 mb-8 rounded-full border border-primary/30 bg-primary/10 text-primary text-xs font-bold uppercase tracking-widest">
+                Reinventing Social Gaming
+            </div>
+            <h1 class="font-display text-6xl md:text-8xl font-extrabold leading-[1] mb-8 tracking-tighter neon-text">
+                Where every <span class="text-primary">aura</span><br />finds its squad.
+            </h1>
+            <p class="max-w-2xl mx-auto text-xl text-slate-400 mb-12 font-medium leading-relaxed">
+                The high-fidelity communication layer for the next generation of gamers. Low latency, crystal audio, and
+                communities that never sleep.
+            </p>
+            <div class="flex flex-wrap justify-center gap-6">
+                <button
+                    class="bg-white text-slate-950 px-10 py-5 rounded-2xl font-bold flex items-center gap-3 hover:shadow-[0_0_30px_rgba(255,255,255,0.2)] hover:-translate-y-1 transition-all">
+                    <span class="material-symbols-outlined">download</span>
+                    Download Desktop
+                </button>
+                <button
+                    class="bg-slate-800/50 backdrop-blur border border-white/10 px-10 py-5 rounded-2xl font-bold hover:bg-slate-800 transition-all">
+                    Open in Browser
+                </button>
+            </div>
+        </div>
+    </header>
+    <section class="relative py-40 bg-background-dark overflow-visible" id="features">
+        <div class="rope-container" id="rope-container">
+            <svg class="rope-svg" id="rope-svg">
+                <path d="" fill="none" id="rope-path" stroke="url(#ropeGradient)" stroke-linecap="round"
+                    stroke-width="3"></path>
+                <defs>
+                    <linearGradient id="ropeGradient" x1="0%" x2="0%" y1="0%" y2="100%">
+                        <stop offset="0%" stop-color="#64748b"></stop>
+                        <stop offset="100%" stop-color="#1e293b"></stop>
+                    </linearGradient>
+                </defs>
+            </svg>
+            <div class="lamp-interactive-area" id="lamp-interactive">
+                <div class="lamp-handle"></div>
+                <div class="lamp-head">
+                    <div class="lamp-bulb-glow"></div>
+                </div>
+                <div class="spotlight-cone-visual" id="spotlight-cone"></div>
+            </div>
+        </div>
+        <div class="max-w-7xl mx-auto px-6 relative z-10">
+            <div class="text-center mb-32 relative z-30 pointer-events-none select-none">
+                <h2 class="font-display text-4xl md:text-6xl font-extrabold mb-6 text-white tracking-tight">The AURA
+                    Advantage</h2>
+                <p class="text-slate-500 text-lg max-w-xl mx-auto">Interact with the hanging spotlight to reveal the
+                    tech powering your next session.</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 relative" id="cards-container">
+                <div class="feature-card-wrapper">
+                    <div class="feature-card-dark">
+                        <div
+                            class="w-14 h-14 bg-primary/10 rounded-2xl flex items-center justify-center text-primary mb-8 border border-primary/20">
+                            <span class="material-symbols-outlined text-3xl">spatial_audio_off</span>
+                        </div>
+                        <h3 class="text-2xl font-bold mb-4 text-white">Spatial Engine</h3>
+                        <p class="text-slate-400 leading-relaxed">Proprietary 3D audio that maps your squad's voices to
+                            their in-game positions.</p>
+                    </div>
+                    <div class="feature-card-lit">
+                        <div
+                            class="w-14 h-14 bg-black/10 rounded-2xl flex items-center justify-center text-black mb-8 border border-black/10">
+                            <span class="material-symbols-outlined text-3xl">spatial_audio_off</span>
+                        </div>
+                        <h3 class="text-2xl font-bold mb-4">Spatial Engine</h3>
+                        <p class="font-medium">Proprietary 3D audio that maps your squad's voices to their in-game
+                            positions.</p>
+                    </div>
+                </div>
+                <div class="feature-card-wrapper">
+                    <div class="feature-card-dark">
+                        <div
+                            class="w-14 h-14 bg-primary/10 rounded-2xl flex items-center justify-center text-primary mb-8 border border-primary/20">
+                            <span class="material-symbols-outlined text-3xl">bolt</span>
+                        </div>
+                        <h3 class="text-2xl font-bold mb-4 text-white">Zero Ghosting</h3>
+                        <p class="text-slate-400 leading-relaxed">Global edge nodes ensure 12ms average latency across
+                            any continent.</p>
+                    </div>
+                    <div class="feature-card-lit">
+                        <div
+                            class="w-14 h-14 bg-black/10 rounded-2xl flex items-center justify-center text-black mb-8 border border-black/10">
+                            <span class="material-symbols-outlined text-3xl">bolt</span>
+                        </div>
+                        <h3 class="text-2xl font-bold mb-4">Zero Ghosting</h3>
+                        <p class="font-medium">Global edge nodes ensure 12ms average latency across any continent.</p>
+                    </div>
+                </div>
+                <div class="feature-card-wrapper">
+                    <div class="feature-card-dark">
+                        <div
+                            class="w-14 h-14 bg-primary/10 rounded-2xl flex items-center justify-center text-primary mb-8 border border-primary/20">
+                            <span class="material-symbols-outlined text-3xl">security</span>
+                        </div>
+                        <h3 class="text-2xl font-bold mb-4 text-white">Vault Privacy</h3>
+                        <p class="text-slate-400 leading-relaxed">Military-grade E2E encryption for all direct and group
+                            communications.</p>
+                    </div>
+                    <div class="feature-card-lit">
+                        <div
+                            class="w-14 h-14 bg-black/10 rounded-2xl flex items-center justify-center text-black mb-8 border border-black/10">
+                            <span class="material-symbols-outlined text-3xl">security</span>
+                        </div>
+                        <h3 class="text-2xl font-bold mb-4">Vault Privacy</h3>
+                        <p class="font-medium">Military-grade E2E encryption for all direct and group communications.
+                        </p>
+                    </div>
+                </div>
+                <div class="feature-card-wrapper">
+                    <div class="feature-card-dark">
+                        <div
+                            class="w-14 h-14 bg-primary/10 rounded-2xl flex items-center justify-center text-primary mb-8 border border-primary/20">
+                            <span class="material-symbols-outlined text-3xl">hub</span>
+                        </div>
+                        <h3 class="text-2xl font-bold mb-4 text-white">Dynamic Hubs</h3>
+                        <p class="text-slate-400 leading-relaxed">Seamlessly bridge different game servers into a single
+                            unified dashboard.</p>
+                    </div>
+                    <div class="feature-card-lit">
+                        <div
+                            class="w-14 h-14 bg-black/10 rounded-2xl flex items-center justify-center text-black mb-8 border border-black/10">
+                            <span class="material-symbols-outlined text-3xl">hub</span>
+                        </div>
+                        <h3 class="text-2xl font-bold mb-4">Dynamic Hubs</h3>
+                        <p class="font-medium">Seamlessly bridge different game servers into a single unified dashboard.
+                        </p>
+                    </div>
+                </div>
+                <div class="feature-card-wrapper">
+                    <div class="feature-card-dark">
+                        <div
+                            class="w-14 h-14 bg-primary/10 rounded-2xl flex items-center justify-center text-primary mb-8 border border-primary/20">
+                            <span class="material-symbols-outlined text-3xl">shield_person</span>
+                        </div>
+                        <h3 class="text-2xl font-bold mb-4 text-white">AI Aegis</h3>
+                        <p class="text-slate-400 leading-relaxed">Self-learning moderation tools that kill toxicity
+                            before it starts.</p>
+                    </div>
+                    <div class="feature-card-lit">
+                        <div
+                            class="w-14 h-14 bg-black/10 rounded-2xl flex items-center justify-center text-black mb-8 border border-black/10">
+                            <span class="material-symbols-outlined text-3xl">shield_person</span>
+                        </div>
+                        <h3 class="text-2xl font-bold mb-4">AI Aegis</h3>
+                        <p class="font-medium">Self-learning moderation tools that kill toxicity before it starts.</p>
+                    </div>
+                </div>
+                <div class="feature-card-wrapper">
+                    <div class="feature-card-dark">
+                        <div
+                            class="w-14 h-14 bg-primary/10 rounded-2xl flex items-center justify-center text-primary mb-8 border border-primary/20">
+                            <span class="material-symbols-outlined text-3xl">auto_fix</span>
+                        </div>
+                        <h3 class="text-2xl font-bold mb-4 text-white">Neon Custom</h3>
+                        <p class="text-slate-400 leading-relaxed">Full CSS skinning support for profiles and community
+                            homepages.</p>
+                    </div>
+                    <div class="feature-card-lit">
+                        <div
+                            class="w-14 h-14 bg-black/10 rounded-2xl flex items-center justify-center text-black mb-8 border border-black/10">
+                            <span class="material-symbols-outlined text-3xl">auto_fix</span>
+                        </div>
+                        <h3 class="text-2xl font-bold mb-4">Neon Custom</h3>
+                        <p class="font-medium">Full CSS skinning support for profiles and community homepages.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="py-32 border-t border-white/5">
+        <div class="max-w-7xl mx-auto px-6 text-center">
+            <h2 class="font-display text-4xl font-bold mb-16 tracking-tight">Ecosystem Stats</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+                <div class="p-10 bg-slate-900/40 rounded-3xl border border-white/10 flex items-center gap-6">
+                    <div class="w-16 h-16 bg-neon/10 text-neon rounded-2xl flex items-center justify-center shrink-0">
+                        <span class="material-symbols-outlined text-3xl">groups_3</span>
+                    </div>
+                    <div class="text-left">
+                        <div class="text-3xl font-bold text-white tracking-tight">12.4M</div>
+                        <div class="text-slate-500 font-medium">Daily Active Squads</div>
+                    </div>
+                </div>
+                <div class="p-10 bg-slate-900/40 rounded-3xl border border-white/10 flex items-center gap-6">
+                    <div
+                        class="w-16 h-16 bg-primary/10 text-primary rounded-2xl flex items-center justify-center shrink-0">
+                        <span class="material-symbols-outlined text-3xl">verified</span>
+                    </div>
+                    <div class="text-left">
+                        <div class="text-3xl font-bold text-white tracking-tight">99.99%</div>
+                        <div class="text-slate-500 font-medium">Uptime Guarantee</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <footer class="py-20 border-t border-white/5">
+        <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-10">
+            <div class="flex items-center gap-2">
+                <div class="w-8 h-8 bg-primary rounded-lg flex items-center justify-center text-white">
+                    <span class="material-symbols-outlined text-lg font-bold">bolt</span>
+                </div>
+                <span class="font-display text-xl font-extrabold tracking-tighter text-neon neon-logo">AURA</span>
+            </div>
+            <p class="text-slate-500 text-sm font-medium">© 2024 AURA INTERACTIVE. ALL RIGHTS RESERVED.</p>
+            <div class="flex gap-8 text-slate-400 font-bold text-xs uppercase tracking-widest">
+                <a class="hover:text-primary transition-colors" href="#">Twitter</a>
+                <a class="hover:text-primary transition-colors" href="#">Discord</a>
+                <a class="hover:text-primary transition-colors" href="#">Manifesto</a>
+            </div>
+        </div>
+    </footer>
+    <script>
+        
+        const cursorBg = document.getElementById("cursor-bg");
+
+        window.addEventListener("mousemove", (e) => {
+            const x = (e.clientX / window.innerWidth) * 100;
+            const y = (e.clientY / window.innerHeight) * 100;
+
+            cursorBg.style.setProperty("--mouse-x", x + "%");
+            cursorBg.style.setProperty("--mouse-y", y + "%");
+        });
+    </script>
+    <script>
+        const lamp = document.getElementById('lamp-interactive');
+        const ropePath = document.getElementById('rope-path');
+        const section = document.getElementById('features');
+        const litCards = document.querySelectorAll('.feature-card-lit');
+        const cone = document.getElementById('spotlight-cone');
+        // Physics Configuration
+        const numPoints = 20;
+        const ropeLengthTotal = 260;
+        const segmentLength = ropeLengthTotal / (numPoints - 1);
+        let points = [];
+        // Physics constants for natural feel
+        const gravity = 0.45;
+        const friction = 0.985;
+        const constraintIterations = 15;
+        let isDragging = false;
+        let mouseX = 0;
+        let mouseY = 0;
+        function initPoints() {
+            const startX = window.innerWidth / 2;
+            points = [];
+            for (let i = 0; i < numPoints; i++) {
+                points.push({
+                    x: startX,
+                    y: i * segmentLength,
+                    oldX: startX,
+                    oldY: i * segmentLength,
+                    fixed: i === 0
+                });
+            }
+        }
+        function updatePhysics() {
+            for (let p of points) {
+                if (!p.fixed) {
+                    const vx = (p.x - p.oldX) * friction;
+                    const vy = (p.y - p.oldY) * friction;
+                    p.oldX = p.x;
+                    p.oldY = p.y;
+                    p.x += vx;
+                    p.y += vy + gravity;
+                }
+            }
+            if (isDragging) {
+                const lastPoint = points[numPoints - 1];
+                const rect = section.getBoundingClientRect();
+                // Stronger pull when dragging for responsiveness
+                lastPoint.x += (mouseX - lastPoint.x) * 0.5;
+                lastPoint.y += (mouseY - lastPoint.y) * 0.5;
+            }
+            for (let i = 0; i < constraintIterations; i++) {
+                for (let j = 0; j < numPoints - 1; j++) {
+                    const p1 = points[j];
+                    const p2 = points[j + 1];
+                    const dx = p2.x - p1.x;
+                    const dy = p2.y - p1.y;
+                    const dist = Math.sqrt(dx * dx + dy * dy);
+                    const diff = (segmentLength - dist) / dist;
+                    const offsetX = dx * diff * 0.5;
+                    const offsetY = dy * diff * 0.5;
+                    if (!p1.fixed) {
+                        p1.x -= offsetX;
+                        p1.y -= offsetY;
+                    }
+                    if (!p2.fixed) {
+                        p2.x += offsetX;
+                        p2.y += offsetY;
+                    }
+                }
+            }
+        }
+        function render() {
+            updatePhysics();
+            // Render Rope as a smooth cubic bezier curve
+            let pathData = `M ${points[0].x} ${points[0].y}`;
+            for (let i = 1; i < points.length - 2; i++) {
+                const xc = (points[i].x + points[i + 1].x) / 2;
+                const yc = (points[i].y + points[i + 1].y) / 2;
+                pathData += ` Q ${points[i].x} ${points[i].y}, ${xc} ${yc}`;
+            }
+            // Curve through last two points
+            pathData += ` Q ${points[numPoints - 2].x} ${points[numPoints - 2].y}, ${points[numPoints - 1].x} ${points[numPoints - 1].y}`;
+            ropePath.setAttribute('d', pathData);
+            // Anchor Lamp to last point
+            const lastPoint = points[numPoints - 1];
+            const pPrev = points[numPoints - 2];
+            // Calculate orientation based on the last segment for a natural swing tilt
+            const angleRad = Math.atan2(lastPoint.y - pPrev.y, lastPoint.x - pPrev.x) - Math.PI / 2;
+            // Positioning lamp: center is offset by 40px (half width)
+            lamp.style.transform = `translate(${lastPoint.x - 40}px, ${lastPoint.y}px) rotate(${angleRad}rad)`;
+            updateCardMasks(lastPoint.x, lastPoint.y, angleRad);
+            requestAnimationFrame(render);
+        }
+        function updateCardMasks(lampX, lampY, angleRad) {
+            const sectionRect = section.getBoundingClientRect();
+            // Beam originates from the bottom center of the lamp head
+            const beamLocalOffsetY = 40;
+            const beamOriginX = lampX + Math.sin(-angleRad) * beamLocalOffsetY;
+            const beamOriginY = lampY + Math.cos(angleRad) * beamLocalOffsetY;
+            const coneSpread = 0.6;
+            const coneDistance = 2000;
+            const baseAngle = angleRad + (Math.PI / 2);
+            const leftAngle = baseAngle - coneSpread;
+            const rightAngle = baseAngle + coneSpread;
+            litCards.forEach(card => {
+                const wrapper = card.closest('.feature-card-wrapper');
+                const wrapperRect = wrapper.getBoundingClientRect();
+                // Point coordinates relative to the wrapper
+                const localX = beamOriginX - wrapperRect.left - window.scrollX;
+                const localY = (beamOriginY + sectionRect.top) - wrapperRect.top;
+                const x1 = localX + Math.cos(leftAngle) * coneDistance;
+                const y1 = localY + Math.sin(leftAngle) * coneDistance;
+                const x2 = localX + Math.cos(rightAngle) * coneDistance;
+                const y2 = localY + Math.sin(rightAngle) * coneDistance;
+                const maskValue = `polygon(${localX}px ${localY}px, ${x1}px ${y1}px, ${x2}px ${y2}px)`;
+                card.style.setProperty('--spotlight-mask', maskValue);
+            });
+        }
+        function updateMousePos(e) {
+            const rect = section.getBoundingClientRect();
+            mouseX = e.clientX;
+            mouseY = e.clientY - rect.top;
+        }
+        lamp.addEventListener('mousedown', (e) => {
+            isDragging = true;
+            updateMousePos(e);
+            e.preventDefault();
+        });
+        window.addEventListener('mousemove', (e) => {
+            if (isDragging) {
+                updateMousePos(e);
+            }
+        });
+        window.addEventListener('mouseup', () => {
+            isDragging = false;
+        });
+        window.addEventListener('resize', () => {
+            initPoints();
+        });
+        initPoints();
+        render();
+    </script>
+
+</body>
+
+</html>
