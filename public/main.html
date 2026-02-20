@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html class="scroll-smooth dark" lang="en">
+<html class="scroll-smooth dark" lang="en" ,>
+
 
 <head>
     <meta charset="utf-8" />
@@ -42,6 +43,17 @@
                 text-shadow: 0 0 8px rgba(0, 242, 255, 0.8);
             }
         }
+
+        html[lang="fa"] {
+          direction: rtl; /* راست به چپ */
+          text-align: right; 
+          font-family: 'Vazir', 'IranSans', sans-serif; /* فونت فارسی مناسب */
+        }
+
+        html[lang="fa"] nav, html[lang="fa"] footer {
+           text-align: right;
+        }
+
         :root {
             --lamp-x: 0px;
             --lamp-y: 0px;
@@ -131,6 +143,11 @@
             border-radius: 1.5rem;
             background: rgba(15, 23, 42, 0.6);
             height: 320px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .feature-card-wrapper:hover {
+            transform: scale(1.03) rotate(-1deg);
+            box-shadow: 0 20px 60px rgba(139, 92, 246, 0.3);
         }
         #cursor-bg {
            position: fixed;
@@ -145,6 +162,17 @@
           );
           transition: background 0.15s ease;
           mix-blend-mode: screen;
+        }
+        #ambient-bg {
+           background: radial-gradient(circle at 20% 30%, rgba(255, 200, 0, 0.2), transparent 50%),
+                       radial-gradient(circle at 80% 70%, rgba(0, 242, 255, 0.2), transparent 50%);
+           animation: moveLights 20s linear infinite;
+           mix-blend-mode: screen;
+        }
+        @keyframes moveLights {
+            0% { background-position: 0% 0%, 100% 100%; }
+            50% { background-position: 100% 50%, 0% 50%; }
+            100% { background-position: 0% 0%, 100% 100%; }
         }
         .feature-card-dark {
             @apply p-8 h-full border border-white/5 bg-slate-900/40 backdrop-blur-xl transition-colors duration-300;
@@ -163,11 +191,24 @@
             backdrop-filter: blur(16px);
             border-bottom: 1px solid rgba(255, 255, 255, 0.05);
         }
+        .neon-text {
+             text-shadow: 0 0 8px rgba(139,92,246,0.7), 0 0 15px rgba(0,242,255,0.5);
+        }
+        #lang-switch:hover #lang-toggle-thumb {
+            transform: scale(1.05);
+        }
+
     </style>
 </head>
 
 <body class="bg-background-dark text-slate-100 font-sans antialiased overflow-x-hidden">
     <div id="cursor-bg"></div>
+    <div class="mt-8 text-center">
+        <button id="lang-toggle"
+            class="bg-primary hover:bg-primary/80 text-white px-5 py-2 rounded-full font-bold transition-all">
+            فارسی
+        </button>
+    </div>ّ
     <nav class="fixed top-0 w-full z-[100] glass-nav">
         <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
             <div class="flex items-center gap-2">
@@ -397,22 +438,135 @@
     </section>
     <footer class="py-20 border-t border-white/5">
         <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-10">
+
+            <!-- Logo -->
             <div class="flex items-center gap-2">
                 <div class="w-8 h-8 bg-primary rounded-lg flex items-center justify-center text-white">
                     <span class="material-symbols-outlined text-lg font-bold">bolt</span>
                 </div>
                 <span class="font-display text-xl font-extrabold tracking-tighter text-neon neon-logo">AURA</span>
             </div>
-            <p class="text-slate-500 text-sm font-medium">© 2024 AURA INTERACTIVE. ALL RIGHTS RESERVED.</p>
-            <div class="flex gap-8 text-slate-400 font-bold text-xs uppercase tracking-widest">
-                <a class="hover:text-primary transition-colors" href="#">Twitter</a>
-                <a class="hover:text-primary transition-colors" href="#">Discord</a>
-                <a class="hover:text-primary transition-colors" href="#">Manifesto</a>
+
+            <!-- Copyright -->
+            <p class="text-slate-500 text-sm font-medium">© 2026 AURA INTERACTIVE. ALL RIGHTS RESERVED.</p>
+
+            <!-- Social Icons -->
+            <div class="flex gap-6">
+
+                <!-- X (Twitter) -->
+                <a href="https://x.com/username" target="_blank" rel="noopener noreferrer"
+                    class="hover:text-primary transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                        <path
+                            d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z" />
+                    </svg>
+                </a>
+
+                <!-- Instagram -->
+                <a href="https://instagram.com/username" target="_blank" rel="noopener noreferrer"
+                    class="hover:text-primary transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                        <path
+                            d="M7.75 2h8.5C19.097 2 21 3.903 21 7.75v8.5C21 20.097 19.097 22 16.25 22h-8.5C4.903 22 3 20.097 3 16.25v-8.5C3 3.903 4.903 2 7.75 2zm0 1.5C5.955 3.5 4.5 4.955 4.5 7.75v8.5c0 2.795 1.455 4.25 3.25 4.25h8.5c2.795 0 4.25-1.455 4.25-4.25v-8.5c0-2.795-1.455-4.25-4.25-4.25h-8.5zM12 7a5 5 0 110 10 5 5 0 010-10zm0 1.5a3.5 3.5 0 100 7 3.5 3.5 0 000-7zm4.75-.88a1.12 1.12 0 11-2.24 0 1.12 1.12 0 012.24 0z" />
+                    </svg>
+                </a>
+
+                <!-- YouTube -->
+                <a href="https://youtube.com/username" target="_blank" rel="noopener noreferrer"
+                    class="hover:text-primary transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                        <path
+                            d="M21.8 8s-.2-1.4-.8-2c-.8-.8-1.7-.8-2.1-.9C16.4 5 12 5 12 5s-4.4 0-6.9.1c-.4 0-1.3.1-2.1.9-.6.6-.8 2-.8 2S2 9.6 2 11.2v1.6c0 1.6.2 3.2.2 3.2s.2 1.4.8 2c.8.8 1.9.8 2.4.9 1.7.1 7.6.1 7.6.1s4.4 0 6.9-.1c.4 0 1.3-.1 2.1-.9.6-.6.8-2 .8-2s.2-1.6.2-3.2v-1.6c0-1.6-.2-3.2-.2-3.2zM10 15V9l5 3-5 3z" />
+                    </svg>
+                </a>
+
+                <!-- Facebook -->
+                <a href="https://facebook.com/username" target="_blank" rel="noopener noreferrer"
+                    class="hover:text-primary transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                        <path
+                            d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 5 3.657 9.128 8.438 9.878v-6.988h-2.54v-2.89h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562v1.875h2.773l-.443 2.89h-2.33V21.878C18.343 21.128 22 17 22 12z" />
+                    </svg>
+                </a>
+            </div>
+
+        </div>
+        <div class="mt-10 flex justify-center w-full">
+            <div id="lang-switch"
+                class="relative flex items-center w-40 h-12 bg-slate-800/40 rounded-full p-1 cursor-pointer select-none shadow-[0_0_15px_rgba(139,92,246,0.5)]">
+                <div id="lang-toggle-thumb"
+                    class="absolute top-1 left-1 w-1/2 h-10 bg-primary rounded-full transition-all shadow-[0_0_10px_rgba(139,92,246,0.7)] flex items-center justify-center text-white font-bold neon-text">
+                    EN
+                </div>
+                <span class="w-1/2 text-center text-white font-bold z-10 pointer-events-none">EN</span>
+                <span class="w-1/2 text-center text-white font-bold z-10 pointer-events-none">FA</span>
             </div>
         </div>
     </footer>
     <script>
-        
+        const langSwitch = document.getElementById("lang-switch");
+        const langThumb = document.getElementById("lang-toggle-thumb");
+
+        // بررسی زبان ذخیره شده
+        const savedLang = localStorage.getItem("site-lang") || "en";
+        setLanguage(savedLang, false); // false یعنی انیمیشن toggle اولیه نداشته باشه
+
+        // هنگام کلیک روی toggle
+        langSwitch.addEventListener("click", () => {
+            const newLang = document.documentElement.lang === "en" ? "fa" : "en";
+            setLanguage(newLang, true);
+            localStorage.setItem("site-lang", newLang);
+        });
+
+        function setLanguage(lang, animate) {
+            document.documentElement.lang = lang;
+            document.documentElement.dir = (lang === "fa") ? "rtl" : "ltr";
+
+            // حرکت toggle thumb
+            if (lang === "fa") {
+                langThumb.style.left = "50%";
+                langThumb.textContent = "FA";
+            } else {
+                langThumb.style.left = "1px";
+                langThumb.textContent = "EN";
+            }
+
+            if (animate) {
+                langThumb.style.transition = "all 0.3s ease";
+            } else {
+                langThumb.style.transition = "none";
+            }
+
+            // تغییر متن سایت
+            if (lang === "fa") {
+                translateToPersian();
+            } else {
+                translateToEnglish();
+            }
+        }
+
+        // توابع نمونه ترجمه
+        function translateToPersian() {
+            document.querySelector("h1").innerHTML = "هر آورا <span class='text-primary'>گروه</span> خود را پیدا می‌کند.";
+            document.querySelector("p").textContent = "لایه ارتباطی با کیفیت بالا برای نسل بعدی گیمرها.";
+            // ادامه سایر متن‌ها...
+        }
+
+        function translateToEnglish() {
+            document.querySelector("h1").innerHTML = "Where every <span class='text-primary'>aura</span> finds its squad.";
+            document.querySelector("p").textContent = "The high-fidelity communication layer for the next generation of gamers.";
+            // ادامه سایر متن‌ها...
+        }
+    </script>
+    <script>
+        const flicker = () => {
+            const offset = (Math.random() - 0.5) * 5;
+            cone.style.transform = `translateX(-50%) rotate(${offset}deg)`;
+            requestAnimationFrame(flicker);
+        };
+        flicker();
+    </script>
+    <script>
         const cursorBg = document.getElementById("cursor-bg");
 
         window.addEventListener("mousemove", (e) => {
