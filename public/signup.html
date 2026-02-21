@@ -267,11 +267,11 @@
         </div>
 
         <p class="text-center mt-8 text-sm text-slate-500">
-            Already in the arena? <a href="#" class="text-[#00F2FF] font-bold hover:underline ml-1">Log In</a>
+            Already in the arena? <a href="login.html" class="text-[#00F2FF] font-bold hover:underline ml-1">Log In</a>
         </p>
     </div>
-    //================================= Aninmation & Logic Script =================================
     <script>
+        //================================= Aninmation & Logic Script =================================
         // Toggle Password Function with smooth icon swap
         function togglePassword(inputId, iconId) {
             const input = document.getElementById(inputId);
@@ -379,15 +379,15 @@
 
                 // redirect after 2 sec
                 setTimeout(() => {
-                    window.location.href = "/finalize.html?email=" + encodeURIComponent(email);
+                    window.location.href = `/finalize.html?email=${encodeURIComponent(email)}`;
                 }, 2500);
 
             } else {
                 alert(data.error || "Signup failed");
             }
         });
+        //================================= End of Script =================================//
     </script>
-    //================================= End of Script =================================//
 </body>
 
 </html>
