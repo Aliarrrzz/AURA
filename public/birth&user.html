@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AURA | Profile Initiation</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap');
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: #030407;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            overflow: hidden;
+            margin: 0;
+        }
+
+        .bg-mesh {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background:
+                radial-gradient(circle at 10% 20%, #1a0b2e 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, #061a1a 0%, transparent 40%);
+            z-index: -1;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+                filter: blur(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+                filter: blur(0);
+            }
+        }
+
+        .reveal {
+            animation: fadeInUp 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        #dynamic-glow {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.35);
+            width: 800px;
+            height: 800px;
+            background: radial-gradient(circle, rgba(139, 92, 246, 0.15) 0%, transparent 70%);
+            filter: blur(80px);
+            border-radius: 50%;
+            z-index: 0;
+            transition: all 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+            opacity: 0.4;
+            pointer-events: none;
+        }
+
+        .setup-card {
+            background: rgba(13, 17, 23, 0.6);
+            backdrop-filter: blur(40px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 2.5rem;
+            padding: 3rem 2.5rem;
+            width: 100%;
+            max-width: 480px;
+            position: relative;
+            z-index: 10;
+            box-shadow: 0 40px 120px rgba(0, 0, 0, 0.5);
+        }
+
+        .input-field {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 1rem;
+            padding: 1rem 1.25rem;
+            color: white;
+            font-size: 0.9rem;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-color: #00F2FF;
+            background: rgba(0, 242, 255, 0.04);
+            box-shadow: 0 0 20px rgba(0, 242, 255, 0.1);
+        }
+
+        /* استایل اختصاصی برای انتخابگر تاریخ */
+        input[type="date"]::-webkit-calendar-picker-indicator {
+            filter: invert(1) brightness(0.8) sepia(100%) saturate(10000%) hue-rotate(170deg);
+            cursor: pointer;
+        }
+
+        .label-style {
+            display: block;
+            font-size: 0.65rem;
+            font-weight: 800;
+            color: #94a3b8;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            margin-bottom: 0.6rem;
+            margin-left: 0.2rem;
+        }
+
+        .btn-finish {
+            width: 100%;
+            background: white;
+            color: black;
+            padding: 1.1rem;
+            border-radius: 1rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            transition: all 0.4s;
+            margin-top: 1.5rem;
+        }
+
+        .btn-finish:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+
+        .btn-finish:not(:disabled):hover {
+            background: #00F2FF;
+            transform: translateY(-2px);
+            box-shadow: 0 15px 30px rgba(0, 242, 255, 0.3);
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="bg-mesh"></div>
+    <div id="dynamic-glow"></div>
+
+    <div class="relative w-full max-w-[500px] px-6 reveal">
+        <div class="flex flex-col items-center mb-8">
+            <div
+                class="bg-[#8B5CF6] w-14 h-14 rounded-2xl flex items-center justify-center shadow-[0_0_40px_rgba(139,92,246,0.3)] mb-4">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                    <circle cx="12" cy="7" r="4" />
+                </svg>
+            </div>
+            <h2 class="text-2xl font-black text-white tracking-tight italic text-center">FINALIZE IDENTITY</h2>
+            <p class="text-slate-500 text-[11px] mt-2 text-center uppercase tracking-widest font-bold">Step 2: Profile
+                Customization</p>
+        </div>
+
+        <div class="setup-card">
+            <form id="setup-form" class="space-y-6">
+                <div>
+                    <label class="label-style">Unique Username</label>
+                    <div class="relative">
+                        <input type="text" id="username" class="input-field aura-input" placeholder="Neural_Commander"
+                            required>
+                        <div id="user-glow"
+                            class="absolute right-4 top-1/2 -translate-y-1/2 w-2 h-2 rounded-full bg-white/20 transition-all duration-500">
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="label-style">Date of Emergence (Birth)</label>
+                    <input type="date" id="birthdate" class="input-field aura-input" required>
+                </div>
+
+                <div id="setup-msg"
+                    class="text-[10px] font-bold uppercase tracking-[0.2em] text-center opacity-0 transition-all text-[#00F2FF]">
+                    Identity Validated
+                </div>
+
+                <button type="submit" id="submit-btn" class="btn-finish" disabled>
+                    Complete Initiation
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const email = urlParams.get("email");
+        const inputs = document.querySelectorAll('.aura-input');
+        const glow = document.getElementById('dynamic-glow');
+        const submitBtn = document.getElementById('submit-btn');
+        const statusMsg = document.getElementById('setup-msg');
+        const userGlow = document.getElementById('user-glow');
+
+        function updateAura() {
+            let filled = 0;
+            inputs.forEach(i => {
+                if (i.value.trim().length > 0) filled++;
+            });
+
+            // افکت برای یوزرنیم
+            if (document.getElementById('username').value.length > 3) {
+                userGlow.style.background = "#00F2FF";
+                userGlow.style.boxShadow = "0 0 10px #00F2FF";
+            } else {
+                userGlow.style.background = "rgba(255,255,255,0.2)";
+                userGlow.style.boxShadow = "none";
+            }
+
+            const progress = filled / inputs.length;
+            glow.style.transform = `translate(-50%, -50%) scale(${0.35 + (progress * 1.8)})`;
+            glow.style.opacity = 0.4 + (progress * 0.4);
+
+            if (progress === 1) {
+                submitBtn.disabled = false;
+                statusMsg.classList.remove('opacity-0');
+                glow.style.background = `radial-gradient(circle, rgba(0, 242, 255, 0.4) 0%, transparent 70%)`;
+            } else {
+                submitBtn.disabled = true;
+                statusMsg.classList.add('opacity-0');
+                glow.style.background = `radial-gradient(circle, rgba(139, 92, 246, 0.15) 0%, transparent 70%)`;
+            }
+        }
+
+        inputs.forEach(input => {
+            input.addEventListener('input', updateAura);
+            input.addEventListener('change', updateAura);
+        });
+
+        document.getElementById('setup-form').addEventListener('submit', async function (e) {
+            e.preventDefault();
+
+            const username = document.getElementById('username').value;
+            const birthdate = document.getElementById('birthdate').value;
+
+            const res = await fetch("http://localhost:3000/api/auth/complete-profile", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ email, username, birthdate })
+            });
+
+            const data = await res.json();
+
+            if (res.ok) {
+                submitBtn.innerHTML = "Syncing Profile...";
+                submitBtn.style.background = "#00F2FF";
+
+                setTimeout(() => {
+                    alert(`Welcome to the Nexus, ${username}! Redirecting to Dashboard...`);
+                    window.location.href = "/dashboard.html";
+                }, 1500);
+            } else {
+                alert(data.error || "Profile update failed");
+            }
+        });
+    </script>
+</body>
+
+</html>

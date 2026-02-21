@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,141 +8,271 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap');
-        
+
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
-            background: radial-gradient(circle at 10% 20%, #1a0b2e 0%, #06070a 45%, #061a1a 100%);
+            background: #030407;
+            /* Darker base for better glow contrast */
             min-height: 100vh;
-            display: flex; align-items: center; justify-content: center;
-            color: white; overflow: hidden; margin: 0; padding: 20px 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            overflow-x: hidden;
+            margin: 0;
+            padding: 40px 0;
+        }
+
+        /* Background Animated Gradients */
+        .bg-mesh {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background:
+                radial-gradient(circle at 10% 20%, #1a0b2e 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, #061a1a 0%, transparent 40%);
+            z-index: -1;
         }
 
         @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(40px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+                filter: blur(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+                filter: blur(0);
+            }
         }
 
-        .reveal { animation: fadeInUp 0.9s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; }
+        .reveal {
+            animation: fadeInUp 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
 
-        /* هاله نوری سبز از همان ابتدا */
         #dynamic-glow {
-            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0.35);
-            width: 1000px; height: 1000px;
-            background: radial-gradient(circle, rgba(34, 197, 94, 0.15) 0%, rgba(34, 197, 94, 0.05) 50%, transparent 70%);
-            filter: blur(100px); border-radius: 50%; z-index: 0;
-            transition: all 1.1s cubic-bezier(0.16, 1, 0.3, 1); opacity: 0.6;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.35);
+            width: 800px;
+            height: 800px;
+            background: radial-gradient(circle, rgba(139, 92, 246, 0.15) 0%, transparent 70%);
+            filter: blur(80px);
+            border-radius: 50%;
+            z-index: 0;
+            transition: all 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+            opacity: 0.4;
+            pointer-events: none;
         }
 
         .signup-card {
-            background: rgba(13, 17, 23, 0.85); backdrop-filter: blur(35px);
-            border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 3rem;
-            padding: 2.5rem; width: 100%; max-width: 500px; position: relative;
-            z-index: 10; box-shadow: 0 50px 100px -20px rgba(0, 0, 0, 0.9);
+            background: rgba(13, 17, 23, 0.6);
+            backdrop-filter: blur(40px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 2.5rem;
+            padding: 2.5rem;
+            width: 100%;
+            max-width: 480px;
+            position: relative;
+            z-index: 10;
+            box-shadow: 0 40px 120px rgba(0, 0, 0, 0.5);
+            transition: transform 0.3s ease;
         }
 
         .input-field {
-            width: 100%; background: rgba(0, 0, 0, 0.4); border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 1.2rem; padding: 0.9rem 1.25rem; color: white; font-size: 0.85rem;
-            transition: all 0.3s ease;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 1rem;
+            padding: 1rem 1.25rem;
+            color: white;
+            font-size: 0.9rem;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .input-field:focus {
-            outline: none; border-color: #00F2FF; box-shadow: 0 0 25px rgba(0, 242, 255, 0.15);
-            background: rgba(0, 242, 255, 0.02);
+            outline: none;
+            border-color: #00F2FF;
+            background: rgba(0, 242, 255, 0.04);
+            box-shadow: 0 0 20px rgba(0, 242, 255, 0.1), inset 0 0 10px rgba(0, 242, 255, 0.05);
+            transform: scale(1.01);
         }
 
         .label-style {
-            display: block; font-size: 0.65rem; font-weight: 800; color: #64748b;
-            text-transform: uppercase; letter-spacing: 0.18em; margin-bottom: 0.6rem; margin-left: 0.5rem;
+            display: block;
+            font-size: 0.65rem;
+            font-weight: 800;
+            color: #94a3b8;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            margin-bottom: 0.6rem;
+            margin-left: 0.2rem;
         }
 
         .btn-submit {
-            width: 100%; background: linear-gradient(135deg, #8B5CF6 0%, #6366f1 100%);
-            padding: 1.2rem; border-radius: 1.2rem; font-weight: 800;
-            text-transform: uppercase; letter-spacing: 0.1em; transition: all 0.4s;
-            box-shadow: 0 10px 20px rgba(139, 92, 246, 0.2); margin-top: 1rem;
+            width: 100%;
+            background: white;
+            color: black;
+            padding: 1.1rem;
+            border-radius: 1rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            transition: all 0.4s;
+            margin-top: 1.5rem;
+            position: relative;
+            overflow: hidden;
         }
 
-        .btn-submit:hover { transform: translateY(-3px); box-shadow: 0 15px 35px rgba(34, 197, 94, 0.4); filter: brightness(1.1); }
+        .btn-submit:hover {
+            background: #00F2FF;
+            transform: translateY(-2px);
+            box-shadow: 0 15px 30px rgba(0, 242, 255, 0.3);
+        }
 
-        #pass-msg {
-            font-size: 10px; font-weight: 700; text-transform: uppercase;
-            letter-spacing: 0.05em; margin-top: 8px; margin-left: 0.5rem;
-            transition: all 0.3s; color: #64748b;
+        .btn-submit:active {
+            transform: translateY(0);
+        }
+
+        @keyframes shake {
+
+            0%,
+            100% {
+                transform: translateX(0);
+            }
+
+            25% {
+                transform: translateX(-4px);
+            }
+
+            75% {
+                transform: translateX(4px);
+            }
+        }
+
+        .shake {
+            animation: shake 0.4s ease-in-out;
+        }
+
+        .social-btn {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 0.8rem;
+            border-radius: 1rem;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            font-size: 0.85rem;
+        }
+
+        .social-btn:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.2);
         }
     </style>
 </head>
+
 <body>
 
+    <div class="bg-mesh"></div>
     <div id="dynamic-glow"></div>
 
-    <div class="relative w-full max-w-[540px] px-6 reveal">
-        <div class="flex items-center justify-center gap-4 mb-8">
-            <div class="bg-[#8B5CF6] w-12 h-12 rounded-2xl flex items-center justify-center shadow-[0_0_25px_rgba(139,92,246,0.5)]">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="white"><path d="M13 2L3 14H12L11 22L21 10H12L13 2Z"/></svg>
+    <div class="relative w-full max-w-[500px] px-6 reveal">
+        <div class="flex flex-col items-center mb-10">
+            <div
+                class="bg-[#8B5CF6] w-14 h-14 rounded-2xl flex items-center justify-center shadow-[0_0_40px_rgba(139,92,246,0.3)] mb-4 transition-transform hover:rotate-12">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="white">
+                    <path d="M13 2L3 14H12L11 22L21 10H12L13 2Z" />
+                </svg>
             </div>
-            <span class="text-4xl font-black text-[#00F2FF] tracking-tighter">AURA</span>
+            <span class="text-3xl font-black text-white tracking-tighter italic">AURA<span
+                    class="text-[#00F2FF]">.</span></span>
         </div>
 
-        <div class="signup-card">
-            <h2 class="text-2xl font-bold text-center mb-8 text-white/90">Create Profile</h2>
+        <div class="signup-card" id="card">
+            <h2 class="text-xl font-bold text-left mb-6 text-white/90">Initialize Profile</h2>
 
             <div class="grid grid-cols-2 gap-4 mb-8">
-                <button class="bg-white/5 border border-white/10 p-3.5 rounded-2xl flex items-center justify-center gap-3 hover:bg-white/10 transition-all text-sm font-semibold">
+                <button class="social-btn">
                     <img src="https://www.google.com/favicon.ico" class="w-4 h-4" alt="G"> Google
                 </button>
-                <button class="bg-white/5 border border-white/10 p-3.5 rounded-2xl flex items-center justify-center gap-3 hover:bg-white/10 transition-all text-sm font-semibold">
-                    <svg width="18" height="18" fill="currentColor" viewBox="0 0 1024 1024"><path d="M747.4 535.7c-.4-120.4 98.6-178.2 103.1-181.1-55.9-81.7-142.7-92.8-173.9-94.1-74.5-7.5-145.3 44.1-183.1 44.1-37.7 0-95.6-43.2-158.5-42.1-82.7 1.2-158.2 48.1-200.7 121.9-85.9 149.1-21.9 369.3 61.3 489.5 40.7 58.7 89.1 124.5 152.7 122.1 61.1-2.4 84.2-39.4 158.1-39.4 73.8 0 94.6 39.4 158.2 38.1 64.7-1.2 107.4-59.9 147.7-118.7 46.5-68.2 65.6-134.2 66.6-137.6-.8-.3-130.6-50.1-131.5-199.9zM621.9 220.1c33.3-40.3 55.8-96.3 49.6-152.2-48.1 1.9-106.3 32-140.7 72.3-30.9 35.8-58 92.7-50.8 147.2 53.7 4.2 108.6-27 141.9-67.3z"/></svg>
+                <button class="social-btn">
+                    <svg width="18" height="18" fill="currentColor" viewBox="0 0 1024 1024">
+                        <path
+                            d="M747.4 535.7c-.4-120.4 98.6-178.2 103.1-181.1-55.9-81.7-142.7-92.8-173.9-94.1-74.5-7.5-145.3 44.1-183.1 44.1-37.7 0-95.6-43.2-158.5-42.1-82.7 1.2-158.2 48.1-200.7 121.9-85.9 149.1-21.9 369.3 61.3 489.5 40.7 58.7 89.1 124.5 152.7 122.1 61.1-2.4 84.2-39.4 158.1-39.4 73.8 0 94.6 39.4 158.2 38.1 64.7-1.2 107.4-59.9 147.7-118.7 46.5-68.2 65.6-134.2 66.6-137.6-.8-.3-130.6-50.1-131.5-199.9zM621.9 220.1c33.3-40.3 55.8-96.3 49.6-152.2-48.1 1.9-106.3 32-140.7 72.3-30.9 35.8-58 92.7-50.8 147.2 53.7 4.2 108.6-27 141.9-67.3z" />
+                    </svg>
                     Apple
                 </button>
             </div>
 
-            <form id="signup-form" class="space-y-5">
+            <form id="signup-form" class="space-y-4">
                 <div>
                     <label class="label-style">Full Name</label>
-                    <input type="text" class="input-field aura-input" placeholder="Alex Mason">
+                    <input type="text" name="username" class="input-field aura-input" placeholder="Alex Mason" required>
                 </div>
                 <div>
                     <label class="label-style">Email Address</label>
-                    <input type="email" class="input-field aura-input" placeholder="nexus@domain.com">
+                    <input type="email" name="email" class="input-field aura-input" placeholder="nexus@domain.com"
+                        required>
                 </div>
                 <div class="grid grid-cols-2 gap-4">
-                    <div class="relative">
+                    <div>
                         <label class="label-style">Access Key</label>
-                        <div class="relative group">
-                            <input type="password" id="main-pass" class="input-field aura-input pr-12" placeholder="••••••••">
-                            <button type="button" onclick="togglePassword('main-pass', 'eye-1')" class="absolute right-4 top-1/2 -translate-y-1/2 text-slate-500 hover:text-[#00F2FF] transition-all focus:outline-none">
-                                <svg id="eye-1" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <div class="relative">
+                            <input type="password" name="password" id="main-pass" class="input-field aura-input pr-10"
+                                placeholder="••••••••" required>
+                            <button type="button" onclick="togglePassword('main-pass', 'eye-1')"
+                                class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-[#00F2FF] transition-all">
+                                <svg id="eye-1" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                                    stroke="currentColor" stroke-width="2">
                                     <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
                                     <circle cx="12" cy="12" r="3"></circle>
                                 </svg>
                             </button>
                         </div>
                     </div>
-                    <div class="relative">
+                    <div>
                         <label class="label-style">Confirm Key</label>
-                        <div class="relative group">
-                            <input type="password" id="conf-pass" class="input-field aura-input pr-12" placeholder="••••••••">
-                            <button type="button" onclick="togglePassword('conf-pass', 'eye-2')" class="absolute right-4 top-1/2 -translate-y-1/2 text-slate-500 hover:text-[#00F2FF] transition-all focus:outline-none">
-                                <svg id="eye-2" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <div class="relative">
+                            <input type="password" name="confirm" id="conf-pass" class="input-field aura-input pr-10"
+                                placeholder="••••••••" required>
+                            <button type="button" onclick="togglePassword('conf-pass', 'eye-2')"
+                                class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-[#00F2FF] transition-all">
+                                <svg id="eye-2" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                                    stroke="currentColor" stroke-width="2">
                                     <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
                                     <circle cx="12" cy="12" r="3"></circle>
                                 </svg>
                             </button>
                         </div>
                     </div>
+
                 </div>
-                <div id="pass-msg">Security: Requirement pending</div>
-                <button type="submit" class="btn-submit">Initialize Profile</button>
+                <div id="pass-msg"
+                    class="text-[10px] font-bold uppercase tracking-wider ml-1 transition-all duration-300">
+                    Security: Awaiting input
+                </div>
+
+                <button type="submit" id="submit-btn" class="btn-submit">
+                    <span id="btn-text">Initialize Profile</span>
+                </button>
             </form>
         </div>
-        
+
         <p class="text-center mt-8 text-sm text-slate-500">
-            Already in the arena? <a href="#" class="text-[#00F2FF] font-bold hover:underline">Log In</a>
+            Already in the arena? <a href="#" class="text-[#00F2FF] font-bold hover:underline ml-1">Log In</a>
         </p>
     </div>
-
+    //================================= Aninmation & Logic Script =================================
     <script>
+        // Toggle Password Function with smooth icon swap
         function togglePassword(inputId, iconId) {
             const input = document.getElementById(inputId);
             const icon = document.getElementById(iconId);
@@ -149,44 +280,114 @@
                 input.type = "text";
                 icon.innerHTML = `<path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line>`;
                 icon.style.color = "#00F2FF";
-                icon.style.filter = "drop-shadow(0 0 8px #00F2FF)";
             } else {
                 input.type = "password";
                 icon.innerHTML = `<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle>`;
-                icon.style.color = ""; icon.style.filter = "";
+                icon.style.color = "";
             }
         }
 
         const inputs = document.querySelectorAll('.aura-input');
         const glow = document.getElementById('dynamic-glow');
         const mainPass = document.getElementById('main-pass');
+        const confPass = document.getElementById('conf-pass');
         const passMsg = document.getElementById('pass-msg');
+        const card = document.getElementById('card');
+        const submitBtn = document.getElementById('submit-btn');
 
+        // Aura Dynamics & Security Logic
         function updateAura() {
             let filled = 0;
             const passVal = mainPass.value;
             const hasUpper = /[A-Z]/.test(passVal);
             const hasNum = /[0-9]/.test(passVal);
+            const isMatch = passVal === confPass.value && passVal !== "";
 
-            if (passVal.length === 0) { passMsg.innerText = "Security: Enter your key"; passMsg.style.color = "#64748b"; }
-            else if (!hasUpper) { passMsg.innerText = "Security: Add Uppercase Letter"; passMsg.style.color = "#f87171"; }
-            else if (!hasNum) { passMsg.innerText = "Security: Add a Number"; passMsg.style.color = "#fbbf24"; }
-            else { passMsg.innerText = "Security: Verified & Strong"; passMsg.style.color = "#22c55e"; }
+            // Security Messages
+            if (passVal.length === 0) {
+                passMsg.innerText = "Security: Enter Access Key";
+                passMsg.style.color = "#64748b";
+            } else if (passVal.length < 8) {
+                passMsg.innerText = "Security: Too Short (Min 8)";
+                passMsg.style.color = "#f87171";
+            } else if (!hasUpper || !hasNum) {
+                passMsg.innerText = "Security: Needs Uppercase & Number";
+                passMsg.style.color = "#fbbf24";
+            } else if (!isMatch && confPass.value !== "") {
+                passMsg.innerText = "Security: Keys Do Not Match";
+                passMsg.style.color = "#f87171";
+            } else if (isMatch) {
+                passMsg.innerText = "Security: Verified & Strong";
+                passMsg.style.color = "#22c55e";
+            }
 
+            // Glow Progress Calculation
             inputs.forEach(i => { if (i.value.trim().length > 0) filled++; });
             const progress = filled / inputs.length;
-            
-            // بزرگ‌تر شدن دایره سبز با پر شدن فرم
-            glow.style.transform = `translate(-50%, -50%) scale(${0.35 + (progress * 2.2)})`;
-            glow.style.opacity = 0.5 + (progress * 0.4);
 
-            if (progress === 1) {
-                glow.style.background = `radial-gradient(circle, rgba(0, 242, 255, 0.3) 0%, rgba(139, 92, 246, 0.1) 50%, transparent 70%)`;
+            // Dynamic Scaling
+            const scale = 0.35 + (progress * 1.8);
+            glow.style.transform = `translate(-50%, -50%) scale(${scale})`;
+            glow.style.opacity = 0.3 + (progress * 0.5);
+
+            // Color Shifting
+            if (progress === 1 && isMatch) {
+                glow.style.background = `radial-gradient(circle, rgba(0, 242, 255, 0.4) 0%, rgba(34, 197, 94, 0.1) 50%, transparent 70%)`;
+            } else if (passVal.length > 0 && (!hasUpper || !hasNum)) {
+                glow.style.background = `radial-gradient(circle, rgba(251, 191, 36, 0.2) 0%, transparent 70%)`;
             } else {
-                glow.style.background = `radial-gradient(circle, rgba(139, 92, 246, 0.22) 0%, rgba(34, 197, 94, 0.05) 50%, transparent 70%)`;
+                glow.style.background = `radial-gradient(circle, rgba(139, 92, 246, 0.3) 0%, transparent 70%)`;
             }
         }
+
         inputs.forEach(input => input.addEventListener('input', updateAura));
+//signup form submission logic
+        document.getElementById('signup-form').addEventListener('submit', async function (e) {
+            e.preventDefault();
+
+            const username = document.querySelector('input[name="username"]').value;
+            const email = document.querySelector('input[name="email"]').value;
+            const password = document.querySelector('input[name="password"]').value;
+            const confirm = document.querySelector('input[name="confirm"]').value;
+
+            if (password !== confirm) {
+                card.classList.add('shake');
+                setTimeout(() => card.classList.remove('shake'), 400);
+                return;
+            }
+
+            const res = await fetch("http://localhost:3000/api/auth/signup", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ username, email, password })
+            });
+
+            const data = await res.json();
+
+            if (res.ok) {
+                // Success animation
+                const btnText = document.getElementById('btn-text');
+                submitBtn.style.pointerEvents = "none";
+                submitBtn.style.background = "#22c55e";
+                btnText.innerText = "Initializing...";
+
+                setTimeout(() => {
+                    btnText.innerText = "Profile Ready";
+                    glow.style.transform = `translate(-50%, -50%) scale(4)`;
+                    glow.style.opacity = "1";
+                }, 1500);
+
+                // redirect after 2 sec
+                setTimeout(() => {
+                    window.location.href = "/finalize.html?email=" + encodeURIComponent(email);
+                }, 2500);
+
+            } else {
+                alert(data.error || "Signup failed");
+            }
+        });
     </script>
+    //================================= End of Script =================================//
 </body>
+
 </html>
