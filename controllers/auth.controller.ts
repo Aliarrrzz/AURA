@@ -6,9 +6,10 @@ import { User } from "../entities/user.model";
 
 const userRepo = AppDataSource.getRepository(User);
 
+// ====================== SIGNUP ======================
 export const signup = async (req: Request, res: Response) => {
   try {
-    const { username, email, password } = req.body;
+    const { email, password } = req.body;
 
     // Check if email exists
     const existing = await userRepo.findOne({ where: { email } });
@@ -19,9 +20,8 @@ export const signup = async (req: Request, res: Response) => {
     // Hash password
     const hashed = await bcrypt.hash(password, 10);
 
-    // Create user
+    // Create user (username is null for now)
     const user = userRepo.create({
-      username,
       email,
       password: hashed,
     });
@@ -35,6 +35,7 @@ export const signup = async (req: Request, res: Response) => {
   }
 };
 
+// ====================== COMPLETE PROFILE ======================
 export const completeProfile = async (req: Request, res: Response) => {
   try {
     const { email, username, birthdate } = req.body;
@@ -54,6 +55,7 @@ export const completeProfile = async (req: Request, res: Response) => {
   }
 };
 
+// ====================== LOGIN ======================
 export const login = async (req: Request, res: Response) => {
   try {
     const { email, password } = req.body;
@@ -70,7 +72,7 @@ export const login = async (req: Request, res: Response) => {
 
     const token = jwt.sign(
       { id: user.id, email: user.email },
-      "secretKey",
+      process.env.JWT_SECRET as string,
       { expiresIn: "1h" }
     );
 

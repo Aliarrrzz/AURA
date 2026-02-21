@@ -194,10 +194,9 @@
     <div class="relative w-full max-w-[500px] px-6 reveal">
         <div class="flex flex-col items-center mb-10">
             <div
-                class="bg-[#8B5CF6] w-14 h-14 rounded-2xl flex items-center justify-center shadow-[0_0_40px_rgba(139,92,246,0.3)] mb-4">
-                <svg width="28" height="28" viewBox="0 0 24 24" fill="white">
-                    <path d="M13 2L3 14H12L11 22L21 10H12L13 2Z" />
-                </svg>
+                class="bg-black w-14 h-14 rounded-full flex items-center justify-center border border-white/10 shadow-xl mb-4 transition-transform duration-500 hover:rotate-12">
+                <img src="https://i.postimg.cc/5NpdTNY8/A3fa9d42040054ea1b982ca73218be2f33-png.jpg" alt="Logo"
+                    class="w-10 h-10 object-cover rounded-full">
             </div>
             <span class="text-3xl font-black text-white tracking-tighter italic">AURA<span
                     class="text-[#00F2FF]">.</span></span>
@@ -266,6 +265,7 @@
     </div>
 
     <script>
+        // ======================= AURA EFFECT LOGIC =======================
         const inputs = document.querySelectorAll('.aura-input');
         const glow = document.getElementById('dynamic-glow');
         const submitBtn = document.getElementById('submit-btn');
@@ -301,6 +301,41 @@
 
         inputs.forEach(input => {
             input.addEventListener('input', updateAura);
+        });
+        //======================= END OF AURA EFFECT LOGIC ======================
+    </script>
+    <script>
+        // ======================= LOGIN SUBMIT LOGIC =======================
+
+        document.getElementById("login-form").addEventListener("submit", async function (e) {
+            e.preventDefault();
+
+            const email = document.querySelector('input[name="email"]').value;
+            const password = document.querySelector('input[name="password"]').value;
+
+            const res = await fetch("http://localhost:3000/api/auth/login", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ email, password })
+            });
+
+            const data = await res.json();
+
+            if (res.ok) {
+                // ذخیره توکن در localStorage
+                localStorage.setItem("aura_token", data.token);
+
+                // انیمیشن موفقیت
+                submitBtn.style.background = "#22c55e";
+                submitBtn.innerText = "Access Granted";
+
+                setTimeout(() => {
+                    window.location.href = "/dashboard.html";
+                }, 1200);
+
+            } else {
+                alert(data.error || "Login failed");
+            }
         });
     </script>
 </body>

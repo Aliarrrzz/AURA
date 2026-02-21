@@ -176,6 +176,56 @@
             background: rgba(255, 255, 255, 0.08);
             border-color: rgba(255, 255, 255, 0.2);
         }
+
+        /* Container برای پیام‌ها داخل کارت */
+        #message-box {
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            max-height: 0;
+            opacity: 0;
+        }
+
+        #message-box.show {
+            max-height: 100px;
+            opacity: 1;
+            margin-bottom: 1.5rem;
+        }
+
+        .aura-msg {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 0.8rem 1rem;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            backdrop-filter: blur(10px);
+            position: relative;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        /* استایل مخصوص خطا با درخشش قرمز */
+        .msg-error {
+            background: rgba(248, 113, 113, 0.05);
+            color: #f87171;
+            box-shadow: 0 0 15px rgba(248, 113, 113, 0.1);
+            border-left: 3px solid #f87171;
+        }
+
+        /* استایل مخصوص موفقیت با درخشش سایبرپنکی */
+        .msg-success {
+            background: rgba(0, 242, 255, 0.05);
+            color: #00F2FF;
+            box-shadow: 0 0 15px rgba(0, 242, 255, 0.1);
+            border-left: 3px solid #00F2FF;
+        }
+
+        /* انیمیشن آیکون */
+        .msg-icon {
+            width: 20px;
+            height: 20px;
+            flex-shrink: 0;
+        }
     </style>
 </head>
 
@@ -187,10 +237,9 @@
     <div class="relative w-full max-w-[500px] px-6 reveal">
         <div class="flex flex-col items-center mb-10">
             <div
-                class="bg-[#8B5CF6] w-14 h-14 rounded-2xl flex items-center justify-center shadow-[0_0_40px_rgba(139,92,246,0.3)] mb-4 transition-transform hover:rotate-12">
-                <svg width="28" height="28" viewBox="0 0 24 24" fill="white">
-                    <path d="M13 2L3 14H12L11 22L21 10H12L13 2Z" />
-                </svg>
+                class="bg-black w-14 h-14 rounded-full flex items-center justify-center border border-white/10 shadow-xl mb-4 transition-transform duration-500 hover:rotate-12">
+                <img src="https://i.postimg.cc/5NpdTNY8/A3fa9d42040054ea1b982ca73218be2f33-png.jpg" alt="Logo"
+                    class="w-10 h-10 object-cover rounded-full">
             </div>
             <span class="text-3xl font-black text-white tracking-tighter italic">AURA<span
                     class="text-[#00F2FF]">.</span></span>
@@ -211,7 +260,7 @@
                     Apple
                 </button>
             </div>
-
+            <div id="message-box"></div>
             <form id="signup-form" class="space-y-4">
                 <div>
                     <label class="label-style">Full Name</label>
@@ -339,10 +388,35 @@
                 glow.style.background = `radial-gradient(circle, rgba(139, 92, 246, 0.3) 0%, transparent 70%)`;
             }
         }
-
         inputs.forEach(input => input.addEventListener('input', updateAura));
-//signup form submission logic
-        document.getElementById('signup-form').addEventListener('submit', async function (e) {
+        function showAuraMessage(text, type = 'error') {
+            const box = document.getElementById('message-box');
+
+            // آیکون‌های مدرن
+            const errorIcon = `<svg class="msg-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>`;
+            const successIcon = `<svg class="msg-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>`;
+
+            box.innerHTML = `
+        <div class="aura-msg msg-${type}">
+            ${type === 'success' ? successIcon : errorIcon}
+            <span>${text}</span>
+        </div>
+    `;
+
+            // ظاهر شدن با انیمیشن
+            box.classList.add('show');
+
+            // اگر خطا بود، بعد از ۵ ثانیه محو بشه
+            if (type === 'error') {
+                setTimeout(() => {
+                    box.classList.remove('show');
+                }, 5000);
+            }
+        }
+
+        //signup form submission logic
+
+document.getElementById('signup-form').addEventListener('submit', async function (e) {
             e.preventDefault();
 
             const username = document.querySelector('input[name="username"]').value;
@@ -350,40 +424,51 @@
             const password = document.querySelector('input[name="password"]').value;
             const confirm = document.querySelector('input[name="confirm"]').value;
 
+            // ۱. چک کردن تطابق پسورد
             if (password !== confirm) {
+                showAuraMessage("Access keys do not match!", "error");
                 card.classList.add('shake');
                 setTimeout(() => card.classList.remove('shake'), 400);
                 return;
             }
 
-            const res = await fetch("http://localhost:3000/api/auth/signup", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ username, email, password })
-            });
+            try {
+                const res = await fetch("http://localhost:3000/api/auth/signup", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ email, password })
+                });
 
-            const data = await res.json();
+                const data = await res.json();
 
-            if (res.ok) {
-                // Success animation
-                const btnText = document.getElementById('btn-text');
-                submitBtn.style.pointerEvents = "none";
-                submitBtn.style.background = "#22c55e";
-                btnText.innerText = "Initializing...";
+                if (res.ok) {
+                    // ۲. نمایش پیام موفقیت خفن
+                    showAuraMessage("Nexus Link Established!", "success");
+                    
+                    const btnText = document.getElementById('btn-text');
+                    submitBtn.style.pointerEvents = "none";
+                    submitBtn.style.background = "#22c55e"; // تغییر رنگ به آبی نئونی AURA
+                    btnText.innerText = "Initializing...";
 
-                setTimeout(() => {
-                    btnText.innerText = "Profile Ready";
-                    glow.style.transform = `translate(-50%, -50%) scale(4)`;
-                    glow.style.opacity = "1";
-                }, 1500);
+                    setTimeout(() => {
+                        btnText.innerText = "Profile Ready";
+                        glow.style.transform = `translate(-50%, -50%) scale(4)`;
+                        glow.style.opacity = "1";
+                        glow.style.background = `radial-gradient(circle, rgba(0, 242, 255, 0.6) 0%, transparent 70%)`;
+                    }, 1000);
 
-                // redirect after 2 sec
-                setTimeout(() => {
-                    window.location.href = `/finalize.html?email=${encodeURIComponent(email)}`;
-                }, 2500);
+                    setTimeout(() => {
+                        window.location.href = `/birth&user.html?email=${encodeURIComponent(email)}`;
+                    }, 2500);
 
-            } else {
-                alert(data.error || "Signup failed");
+                } else {
+                    // ۳. جایگزین کردن alert با پیام شخصی‌سازی شده
+                    showAuraMessage(data.error || "Initialization Failed!", "error");
+                    card.classList.add('shake');
+                    setTimeout(() => card.classList.remove('shake'), 400);
+                }
+            } catch (err) {
+                showAuraMessage("Connection Lost. Check Proxy.", "error");
             }
         });
         //================================= End of Script =================================//
