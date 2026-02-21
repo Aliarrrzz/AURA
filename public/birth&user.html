@@ -137,6 +137,51 @@
             transform: translateY(-2px);
             box-shadow: 0 15px 30px rgba(0, 242, 255, 0.3);
         }
+
+        #message-box {
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            max-height: 0;
+            opacity: 0;
+        }
+
+        #message-box.show {
+            max-height: 100px;
+            opacity: 1;
+            margin-bottom: 1.5rem;
+        }
+
+        .aura-msg {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 0.8rem 1rem;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .msg-error {
+            background: rgba(248, 113, 113, 0.05);
+            color: #f87171;
+            box-shadow: 0 0 15px rgba(248, 113, 113, 0.1);
+            border-left: 3px solid #f87171;
+        }
+
+        .msg-success {
+            background: rgba(0, 242, 255, 0.05);
+            color: #00F2FF;
+            box-shadow: 0 0 15px rgba(0, 242, 255, 0.1);
+            border-left: 3px solid #00F2FF;
+        }
+
+        .msg-icon {
+            width: 20px;
+            height: 20px;
+            flex-shrink: 0;
+        }
     </style>
 </head>
 
@@ -158,8 +203,8 @@
             <p class="text-slate-500 text-[11px] mt-2 text-center uppercase tracking-widest font-bold">Step 2: Profile
                 Customization</p>
         </div>
-
         <div class="setup-card">
+            <div id="message-box"></div>
             <form id="setup-form" class="space-y-6">
                 <div>
                     <label class="label-style">Unique Username</label>
@@ -204,7 +249,6 @@
                 if (i.value.trim().length > 0) filled++;
             });
 
-            // افکت برای یوزرنیم
             if (document.getElementById('username').value.length > 3) {
                 userGlow.style.background = "#00F2FF";
                 userGlow.style.boxShadow = "0 0 10px #00F2FF";
@@ -233,30 +277,59 @@
             input.addEventListener('change', updateAura);
         });
 
+        // Function to show the cool messages
+        function showAuraMessage(text, type = 'error') {
+            const box = document.getElementById('message-box');
+            const errorIcon = `<svg class="msg-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>`;
+            const successIcon = `<svg class="msg-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>`;
+
+            box.innerHTML = `
+                <div class="aura-msg msg-${type}">
+                    ${type === 'success' ? successIcon : errorIcon}
+                    <span>${text}</span>
+                </div>`;
+
+            box.classList.add('show');
+            if (type === 'error') {
+                setTimeout(() => box.classList.remove('show'), 5000);
+            }
+        }
+        //===============================setup form submission=========================================
         document.getElementById('setup-form').addEventListener('submit', async function (e) {
             e.preventDefault();
 
             const username = document.getElementById('username').value;
             const birthdate = document.getElementById('birthdate').value;
 
-            const res = await fetch("http://localhost:3000/api/auth/complete-profile", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ email, username, birthdate })
-            });
+            try {
+                const res = await fetch("http://localhost:3000/api/auth/complete-profile", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ email, username, birthdate })
+                });
 
-            const data = await res.json();
+                const data = await res.json();
 
-            if (res.ok) {
-                submitBtn.innerHTML = "Syncing Profile...";
-                submitBtn.style.background = "#00F2FF";
+                if (res.ok) {
+                    // نمایش پیام موفقیت
+                    showAuraMessage(`Welcome to the Nexus, ${username}!`, "success");
 
-                setTimeout(() => {
-                    alert(`Welcome to the Nexus, ${username}! Redirecting to Dashboard...`);
-                    window.location.href = "/dashboard.html";
-                }, 1500);
-            } else {
-                alert(data.error || "Profile update failed");
+                    submitBtn.innerHTML = "Syncing Profile...";
+                    submitBtn.style.background = "#00F2FF";
+                    submitBtn.disabled = true;
+
+                    // ریدایرکت بعد از ۲ ثانیه بدون alert
+                    setTimeout(() => {
+                        window.location.href = "/dashboard.html";
+                    }, 2000);
+
+                } else {
+                    // نمایش خطای دیتابیس یا سرور
+                    showAuraMessage(data.error || "Profile update failed", "error");
+                }
+            } catch (err) {
+                // نمایش خطای شبکه
+                showAuraMessage("Neural Link Interrupted. Check connection.", "error");
             }
         });
     </script>
