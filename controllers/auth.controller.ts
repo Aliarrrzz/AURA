@@ -1,125 +1,118 @@
 import { Request, Response } from "express";
 import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken";
 import { AppDataSource } from "../config/data-source";
 import { User } from "../entities/user.model";
+import { generateAccessToken, generateRefreshToken } from "../utils/jwt"; 
 
 const userRepo = AppDataSource.getRepository(User);
 
 // ====================== SIGNUP ======================
 export const signup = async (req: Request, res: Response) => {
   try {
-    const { email, password } = req.body;
-
-    // 1) اعتبارسنجی ساده (می‌تونی بعداً DTO/validator اضافه کنی)
-    if (!email || !password) {
-      return res.status(400).json({ error: "Email and password are required" });
+    const { email, password, username, birthdate } = req.body;
+    
+    if (!email || !password || !username) {
+      return res.status(400).json({ error: "Email, password, and username are required" });
     }
 
-    // 2) نرمال‌سازی ایمیل
     const normalizedEmail = email.toLowerCase();
+    const existing = await userRepo.findOne({ where: [{ email: normalizedEmail }, { username }] });
+    
+    if (existing) return res.status(400).json({ error: "Email or Username already exists" });
 
-    // 3) چک کردن وجود ایمیل
-    const existing = await userRepo.findOne({ where: { email: normalizedEmail } });
-    if (existing) {
-      return res.status(400).json({ error: "Email already exists" });
-    }
-
-    // 4) هش کردن پسورد
     const hashed = await bcrypt.hash(password, 10);
-
-    // 5) ساخت یوزر (username و birthdate فعلاً خالی)
-    const user = userRepo.create({
-      email: normalizedEmail,
+    
+    const user = userRepo.create({ 
+      email: normalizedEmail, 
       password: hashed,
+      username, 
+      birthdate: birthdate ? new Date(birthdate) : undefined 
     });
-
+    
     await userRepo.save(user);
 
-    // 6) پاسخ نهایی
-    return res.status(201).json({
-      message: "User created successfully",
-      user: {
-        id: user.id,
-        email: user.email,
-      },
-    });
+    // --- بخش Auto-Login ---
+    const payload = { id: user.id, email: user.email };
+    const accessToken = generateAccessToken(payload);
+    const refreshToken = generateRefreshToken(payload);
 
+    return res.status(201).json({
+      message: "User created and logged in successfully",
+      accessToken, // توکن را به فرانت‌اِند برگردان
+      refreshToken,
+      user: { 
+        id: user.id, 
+        email: user.email, 
+        username: user.username,
+        avatar: `https://ui-avatars.com/api/?name=${user.username}&background=8B5CF6&color=fff`
+      }
+    });
   } catch (err) {
     console.error(err);
     return res.status(500).json({ error: "Signup failed" });
   }
 };
-
 // ====================== COMPLETE PROFILE ======================
 export const completeProfile = async (req: Request, res: Response) => {
   try {
     const { email, username, birthdate } = req.body;
+    const user = await userRepo.findOne({ where: { email: email?.toLowerCase() } });
 
-    const user = await userRepo.findOne({ where: { email } });
-    if (!user) return res.status(404).json({ error: "User not found" });
+    if (!user) return res.status(404).json({ error: "User record not found." });
+
+    const usernameExists = await userRepo.findOne({ where: { username } });
+    if (usernameExists) return res.status(400).json({ error: "Username is already taken." });
 
     user.username = username;
-    user.birthdate = birthdate;
-
+    user.birthdate = new Date(birthdate);
     await userRepo.save(user);
 
-    return res.json({ message: "Profile completed successfully" });
+    const payload = { id: user.id, email: user.email };
+    const accessToken = generateAccessToken(payload);
+
+    return res.json({ 
+        message: "Profile synchronized successfully!",
+        accessToken, 
+        username: user.username 
+    });
   } catch (err) {
-    console.error(err);
-    return res.status(500).json({ error: "Profile update failed" });
+    return res.status(500).json({ error: "Sync failed" });
   }
 };
 
 // ====================== LOGIN ======================
-import { generateAccessToken, generateRefreshToken } from "../utils/jwt";
-
 export const login = async (req: Request, res: Response) => {
   try {
     const { email, password } = req.body;
-    const normalizedEmail = email.toLowerCase();
+    const user = await userRepo.findOne({ where: { email: email.toLowerCase() } });
 
-    const user = await userRepo.findOne({ where: { email: normalizedEmail } });
-    if (!user) {
-      return res.status(400).json({ error: "Invalid credentials" });
-    }
-
-    const match = await bcrypt.compare(password, user.password);
-    if (!match) {
+    if (!user || !(await bcrypt.compare(password, user.password))) {
       return res.status(400).json({ error: "Invalid credentials" });
     }
 
     const payload = { id: user.id, email: user.email };
-
     const accessToken = generateAccessToken(payload);
     const refreshToken = generateRefreshToken(payload);
 
-    // در انتهای متد login
     return res.json({
       accessToken,
       refreshToken,
       user: {
         id: user.id,
         email: user.email,
-        // اگر username نداشت، بخش اول ایمیل را بفرست یا یک اسم پیش‌فرض
-        username: user.username || user.email.split('@')[0],
-        birthdate: user.birthdate,
-        // آواتار یوزر (می‌توانی از یک URL پیش‌فرض بر اساس اسم استفاده کنی)
+        username: user.username || 'Aura Explorer',
         avatar: `https://ui-avatars.com/api/?name=${user.username || 'User'}&background=8B5CF6&color=fff`
       },
     });
-
   } catch (err) {
-    console.error(err);
     return res.status(500).json({ error: "Login failed" });
   }
 };
+
 // ====================== GET CURRENT USER ======================
 export const getMe = async (req: Request, res: Response) => {
   try {
-    // req.user توسط authMiddleware که قبلاً داشتی پر می‌شود
-    const userId = (req as any).user.id; 
-
+    const userId = (req as any).user.id;
     const user = await userRepo.findOne({ where: { id: userId } });
     if (!user) return res.status(404).json({ error: "User not found" });
 
@@ -127,7 +120,7 @@ export const getMe = async (req: Request, res: Response) => {
       user: {
         id: user.id,
         email: user.email,
-        username: user.username || user.email.split('@')[0],
+        username: user.username, 
         avatar: `https://ui-avatars.com/api/?name=${user.username || 'User'}&background=8B5CF6&color=fff`
       }
     });
