@@ -11,8 +11,11 @@ export class User {
   @Column({ unique: true })
   email!: string;
 
-  @Column()
-  password!: string;
+  @Column({ nullable: true })
+  password!: string
+
+  @Column({ nullable: true })
+  googleId!: string;
 
   @Column({ type: "date", nullable: true })
   birthdate!: Date;
