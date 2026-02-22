@@ -183,6 +183,72 @@
             background: rgba(255, 255, 255, 0.08);
             border-color: rgba(255, 255, 255, 0.2);
         }
+
+        #message-box {
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            max-height: 0;
+            opacity: 0;
+        }
+
+        #message-box.show {
+            max-height: 100px;
+            opacity: 1;
+            margin-bottom: 1.5rem;
+        }
+
+        .aura-msg {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 0.8rem 1rem;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .msg-error {
+            background: rgba(248, 113, 113, 0.05);
+            color: #f87171;
+            box-shadow: 0 0 15px rgba(248, 113, 113, 0.1);
+            border-left: 3px solid #f87171;
+        }
+
+        .msg-success {
+            background: rgba(0, 242, 255, 0.05);
+            color: #00F2FF;
+            box-shadow: 0 0 15px rgba(0, 242, 255, 0.1);
+            border-left: 3px solid #00F2FF;
+        }
+
+        .msg-icon {
+            width: 20px;
+            height: 20px;
+            flex-shrink: 0;
+        }
+
+        /* Shake Animation for Errors */
+        @keyframes shake {
+
+            0%,
+            100% {
+                transform: translateX(0);
+            }
+
+            25% {
+                transform: translateX(-8px);
+            }
+
+            75% {
+                transform: translateX(8px);
+            }
+        }
+
+        .shake-effect {
+            animation: shake 0.4s ease-in-out;
+        }
     </style>
 </head>
 
@@ -216,11 +282,13 @@
                     Apple
                 </button>
             </div>
+            <div id="message-box"></div>
 
             <form id="login-form" class="space-y-5">
                 <div>
                     <label class="label-style">Email Address</label>
-                    <input type="email" class="input-field aura-input" placeholder="nexus@domain.com" required>
+                    <input name="email" type="email" class="input-field aura-input" placeholder="nexus@domain.com"
+                        required>
                 </div>
 
                 <div>
@@ -231,7 +299,7 @@
                             Key?</a>
                     </div>
                     <div class="relative group">
-                        <input type="password" id="password-input" class="input-field aura-input pr-12"
+                        <input name="password" type="password" id="password-input" class="input-field aura-input pr-12"
                             placeholder="••••••••" required>
                         <button type="button" onclick="togglePassword()"
                             class="absolute right-4 top-1/2 -translate-y-1/2 text-slate-500 hover:text-[#00F2FF] transition-all">
@@ -306,6 +374,24 @@
     </script>
     <script>
         // ======================= LOGIN SUBMIT LOGIC =======================
+        const loginCard = document.querySelector('.login-card');
+
+        function showAuraMessage(text, type = 'error') {
+            const box = document.getElementById('message-box');
+            const errorIcon = `<svg class="msg-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>`;
+            const successIcon = `<svg class="msg-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>`;
+
+            box.innerHTML = `
+                <div class="aura-msg msg-${type}">
+                    ${type === 'success' ? successIcon : errorIcon}
+                    <span>${text}</span>
+                </div>`;
+
+            box.classList.add('show');
+            if (type === 'error') {
+                setTimeout(() => box.classList.remove('show'), 5000);
+            }
+        }
 
         document.getElementById("login-form").addEventListener("submit", async function (e) {
             e.preventDefault();
@@ -313,28 +399,36 @@
             const email = document.querySelector('input[name="email"]').value;
             const password = document.querySelector('input[name="password"]').value;
 
-            const res = await fetch("http://localhost:3000/api/auth/login", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ email, password })
-            });
+            try {
+                const res = await fetch("http://localhost:3000/api/auth/login", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ email, password })
+                });
 
-            const data = await res.json();
+                const data = await res.json();
 
-            if (res.ok) {
-                // ذخیره توکن در localStorage
-                localStorage.setItem("aura_token", data.token);
+                if (res.ok) {
+                    localStorage.setItem("aura_access", data.accessToken);
 
-                // انیمیشن موفقیت
-                submitBtn.style.background = "#22c55e";
-                submitBtn.innerText = "Access Granted";
+                    // انیمیشن موفقیت
+                    showAuraMessage("Identity Confirmed. Syncing...", "success");
+                    submitBtn.style.background = "#00F2FF";
+                    submitBtn.innerText = "Access Granted";
+                    submitBtn.disabled = true;
 
-                setTimeout(() => {
-                    window.location.href = "/dashboard.html";
-                }, 1200);
+                    setTimeout(() => {
+                        window.location.href = "/dashboard.html";
+                    }, 1500);
 
-            } else {
-                alert(data.error || "Login failed");
+                } else {
+                    // نمایش خطا و لرزش کارت
+                    showAuraMessage(data.error || "Verification Failed", "error");
+                    loginCard.classList.add('shake-effect');
+                    setTimeout(() => loginCard.classList.remove('shake-effect'), 400);
+                }
+            } catch (err) {
+                showAuraMessage("Neural Link Interrupted.", "error");
             }
         });
     </script>
