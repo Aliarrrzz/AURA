@@ -94,19 +94,44 @@ export const login = async (req: Request, res: Response) => {
     const accessToken = generateAccessToken(payload);
     const refreshToken = generateRefreshToken(payload);
 
+    // در انتهای متد login
     return res.json({
       accessToken,
       refreshToken,
       user: {
         id: user.id,
         email: user.email,
-        username: user.username,
+        // اگر username نداشت، بخش اول ایمیل را بفرست یا یک اسم پیش‌فرض
+        username: user.username || user.email.split('@')[0],
         birthdate: user.birthdate,
+        // آواتار یوزر (می‌توانی از یک URL پیش‌فرض بر اساس اسم استفاده کنی)
+        avatar: `https://ui-avatars.com/api/?name=${user.username || 'User'}&background=8B5CF6&color=fff`
       },
     });
 
   } catch (err) {
     console.error(err);
     return res.status(500).json({ error: "Login failed" });
+  }
+};
+// ====================== GET CURRENT USER ======================
+export const getMe = async (req: Request, res: Response) => {
+  try {
+    // req.user توسط authMiddleware که قبلاً داشتی پر می‌شود
+    const userId = (req as any).user.id; 
+
+    const user = await userRepo.findOne({ where: { id: userId } });
+    if (!user) return res.status(404).json({ error: "User not found" });
+
+    return res.json({
+      user: {
+        id: user.id,
+        email: user.email,
+        username: user.username || user.email.split('@')[0],
+        avatar: `https://ui-avatars.com/api/?name=${user.username || 'User'}&background=8B5CF6&color=fff`
+      }
+    });
+  } catch (err) {
+    return res.status(500).json({ error: "Failed to fetch user" });
   }
 };

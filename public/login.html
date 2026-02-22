@@ -409,26 +409,36 @@
                 const data = await res.json();
 
                 if (res.ok) {
-                    localStorage.setItem("aura_access", data.accessToken);
+                    // ذخیره‌سازی
+                    localStorage.setItem("accessToken", data.accessToken);
+                    localStorage.setItem("username", data.user.username);
+                    localStorage.setItem("avatar", data.user.avatar);
 
-                    // انیمیشن موفقیت
                     showAuraMessage("Identity Confirmed. Syncing...", "success");
-                    submitBtn.style.background = "#00F2FF";
-                    submitBtn.innerText = "Access Granted";
-                    submitBtn.disabled = true;
+
+                    // غیرفعال کردن دکمه برای جلوگیری از کلیک مجدد
+                    const submitBtn = e.target.querySelector('button[type="submit"]');
+                    if (submitBtn) {
+                        submitBtn.style.background = "#00F2FF";
+                        submitBtn.innerText = "Access Granted";
+                        submitBtn.disabled = true;
+                    }
 
                     setTimeout(() => {
-                        window.location.href = "/dashboard.html";
-                    }, 1500);
+                        window.location.replace("main.html"); // استفاده از replace بهتر است
+                    }, 1000);
 
                 } else {
-                    // نمایش خطا و لرزش کارت
                     showAuraMessage(data.error || "Verification Failed", "error");
                     loginCard.classList.add('shake-effect');
                     setTimeout(() => loginCard.classList.remove('shake-effect'), 400);
                 }
             } catch (err) {
-                showAuraMessage("Neural Link Interrupted.", "error");
+                // فقط زمانی ارور بده که واقعاً ارتباط قطع شده باشه و دیتایی ذخیره نشده باشه
+                if (!localStorage.getItem("accessToken")) {
+                    console.error("Login Error:", err);
+                    showAuraMessage("Neural Link Interrupted.", "error");
+                }
             }
         });
     </script>

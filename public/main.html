@@ -225,8 +225,8 @@
                 <a class="hover:text-neon transition-colors" href="#">Nexus</a>
                 <a class="hover:text-neon transition-colors" href="#">Pulse</a>
             </div>
-            <div>
-                <button onclick="window.location.href='login.html'"
+            <div id="auth-section">
+                <button id="login-btn" onclick="window.location.href='login.html'"
                     class="bg-primary hover:bg-primary/80 text-white px-7 py-2.5 rounded-full font-bold transition-all shadow-[0_0_20px_rgba(139,92,246,0.3)] active:scale-95">
                     Log In
                 </button>
@@ -504,6 +504,7 @@
         </div>
     </footer>
     <script>
+        //====================animation for language toggle and persian translation====================//
         const langSwitch = document.getElementById("lang-switch");
         const langThumb = document.getElementById("lang-toggle-thumb");
 
@@ -717,6 +718,88 @@
         });
         initPoints();
         render();
+        //=================end of lamp and rope animation=================//
+    </script>
+
+    <script>
+        // تابع اصلی برای بررسی وضعیت ورود کاربر
+        async function checkAuthStatus() {
+            const authSection = document.getElementById("auth-section");
+            const token = localStorage.getItem("accessToken");
+            const storedName = localStorage.getItem("username");
+            const storedAvatar = localStorage.getItem("avatar");
+
+            // ۱. اگر توکن و نام در حافظه هست، سریعاً رابط کاربری را بروزرسانی کن
+            if (token && storedName) {
+                updateUserUI(storedName, storedAvatar);
+            }
+
+            // ۲. اگر توکن داریم، از سرور استعلام بگیر که آیا توکن هنوز معتبر است یا خیر
+            if (token) {
+                try {
+                    const response = await fetch('/api/auth/me', {
+                        method: 'GET',
+                        headers: {
+                            'Authorization': `Bearer ${token}`,
+                            'Content-Type': 'application/json'
+                        }
+                    });
+
+                    if (response.ok) {
+                        const data = await response.json();
+                        // ذخیره دیتای تازه از سرور در LocalStorage
+                        localStorage.setItem("username", data.user.username);
+                        localStorage.setItem("avatar", data.user.avatar);
+
+                        // بروزرسانی نهایی رابط کاربری با اطلاعات قطعی سرور
+                        updateUserUI(data.user.username, data.user.avatar);
+                    } else if (response.status === 401 || response.status === 403) {
+                        // اگر توکن منقضی یا نامعتبر بود
+                        handleLogout();
+                    }
+                } catch (error) {
+                    console.error("خطا در ارتباط با سرور:", error);
+                }
+            }
+        }
+
+        // تابع برای رندر کردن بخش پروفایل کاربر
+        function updateUserUI(name, avatarUrl) {
+            const authSection = document.getElementById("auth-section");
+            const finalAvatar = avatarUrl || `https://ui-avatars.com/api/?name=${name}&background=8B5CF6&color=fff`;
+
+            authSection.innerHTML = `
+            <div class="group relative flex items-center gap-3 bg-slate-800/40 p-1 pr-4 rounded-full border border-white/10 hover:border-primary/50 transition-all cursor-pointer">
+                <img src="${finalAvatar}" alt="User" class="w-8 h-8 rounded-full border border-primary/50 shadow-[0_0_10px_rgba(139,92,246,0.4)]">
+                <div class="flex flex-col">
+                    <span class="text-xs text-slate-400 font-medium leading-none">Welcome,</span>
+                    <span class="text-sm font-bold text-white tracking-wide">${name}</span>
+                </div>
+                <span class="material-symbols-outlined text-slate-500 text-sm group-hover:text-primary transition-colors">expand_more</span>
+                
+                <div class="absolute top-full right-0 mt-2 w-40 bg-slate-900 border border-white/10 rounded-xl shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 overflow-hidden">
+                    <a href="account.html" class="flex items-center gap-2 px-4 py-2.5 text-sm text-slate-300 hover:bg-white/5 transition-colors">
+                        <span class="material-symbols-outlined text-sm">person</span> Profile
+                    </a>
+                    <button onclick="handleLogout()" class="w-full flex items-center gap-2 px-4 py-2.5 text-sm text-red-400 hover:bg-red-500/10 transition-colors border-t border-white/5">
+                        <span class="material-symbols-outlined text-sm">logout</span> Logout
+                    </button>
+                </div>
+            </div>
+        `;
+        }
+
+        // تابع خروج از حساب
+        function handleLogout() {
+            localStorage.removeItem("accessToken");
+            localStorage.removeItem("refreshToken");
+            localStorage.removeItem("username");
+            localStorage.removeItem("avatar");
+            window.location.reload(); // بازگشت به حالت دکمه Login
+        }
+
+        // اجرا به محض لود شدن صفحه
+        document.addEventListener("DOMContentLoaded", checkAuthStatus);
     </script>
 
 </body>
