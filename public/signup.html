@@ -419,6 +419,27 @@
                 return;
             }
 
+            if (password.length < 8) {
+                showAuraMessage("Password must be at least 8 characters!", "error");
+                card.classList.add('shake');
+                setTimeout(() => card.classList.remove('shake'), 400);
+                return;
+            }
+
+            if (!/[A-Z]/.test(password)) {
+                showAuraMessage("Password must contain at least one uppercase letter!", "error");
+                card.classList.add('shake');
+                setTimeout(() => card.classList.remove('shake'), 400);
+                return;
+            }
+
+            if (!/[0-9]/.test(password)) {
+                showAuraMessage("Password must contain at least one number!", "error");
+                card.classList.add('shake');
+                setTimeout(() => card.classList.remove('shake'), 400);
+                return;
+            }
+
             try {
                 const checkRes = await fetch("http://localhost:3000/api/auth/check-email", {
                     method: "POST",
