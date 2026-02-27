@@ -8,6 +8,28 @@ import { generateAccessToken, generateRefreshToken } from "../utils/jwt";
 
 const userRepo = AppDataSource.getRepository(User);
 
+//==================welcome email=====================
+
+const sendWelcomeEmail = async (email: string, username: string) => {
+  await transporter.sendMail({
+    from: `"AURA System" <${process.env.GMAIL_USER}>`,
+    to: email,
+    subject: "AURA | Welcome to the Arena",
+    html: `
+      <div style="background:#030407;color:white;padding:40px;font-family:sans-serif;border-radius:16px;max-width:500px;margin:auto;">
+        <h2 style="color:#00F2FF;">Welcome, ${username} 👾</h2>
+        <p style="color:#94a3b8;">Your identity has been initialized in the AURA network.</p>
+        <p style="color:#94a3b8;">You're now part of the arena. Get ready to explore.</p>
+        <div style="margin-top:30px;padding:20px;background:rgba(139,92,246,0.1);border-left:3px solid #8B5CF6;border-radius:8px;">
+          <p style="color:#c4b5fd;margin:0;">Username: <strong style="color:white;">${username}</strong></p>
+        </div>
+        <p style="margin-top:30px;color:#64748b;font-size:12px;">AURA System — You're connected.</p>
+      </div>
+    `,
+  });
+};
+
+
 // ====================== SIGNUP ======================
 export const signup = async (req: Request, res: Response) => {
   try {
@@ -35,6 +57,9 @@ export const signup = async (req: Request, res: Response) => {
     });
 
     await userRepo.save(user);
+    await sendWelcomeEmail(user.email, user.username).catch(err =>
+      console.error("Welcome email failed:", err)
+    );
 
     const payload = { id: user.id, email: user.email };
     const accessToken = generateAccessToken(payload);
@@ -107,7 +132,7 @@ export const login = async (req: Request, res: Response) => {
     const user = await userRepo.findOne({ where: { email: email.toLowerCase() } });
 
     if (!user || !(await bcrypt.compare(password, user.password))) {
-      return res.status(400).json({ error: "Invalid credentials" });
+      return res.status(400).json({ error: "Email Or Password Wrong" });
     }
 
     const payload = { id: user.id, email: user.email };

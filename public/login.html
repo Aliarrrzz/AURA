@@ -424,7 +424,7 @@
                     }
 
                     setTimeout(() => {
-                        window.location.replace("main.html"); // استفاده از replace بهتر است
+                        window.location.replace("main.html");
                     }, 1000);
 
                 } else {
@@ -433,7 +433,6 @@
                     setTimeout(() => loginCard.classList.remove('shake-effect'), 400);
                 }
             } catch (err) {
-                // فقط زمانی ارور بده که واقعاً ارتباط قطع شده باشه و دیتایی ذخیره نشده باشه
                 if (!localStorage.getItem("accessToken")) {
                     console.error("Login Error:", err);
                     showAuraMessage("Neural Link Interrupted.", "error");

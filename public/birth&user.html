@@ -310,7 +310,7 @@
                 setTimeout(() => window.location.href = "signup.html", 2000);
                 return;
             }
-            const usernameRegex = /^[a-zA-Z\s]+$/;
+            const usernameRegex = /^[a-zA-Z0-9\s]+$/;
             if (!usernameRegex.test(username)) {
                 showAuraMessage("Username can only contain letters and spaces.", "error");
                 return;
@@ -371,9 +371,13 @@
 
                 } else {
                     showAuraMessage(data.error || "Signup failed", "error");
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = "Complete Initiation";
                 }
             } catch (err) {
                 showAuraMessage("Neural Link Interrupted. Check connection.", "error");
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = "Complete Initiation";
             }
         });
     </script>
