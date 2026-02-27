@@ -320,7 +320,6 @@
     </div>
     <script>
         //================================= Aninmation & Logic Script =================================
-        // Toggle Password Function with smooth icon swap
         function togglePassword(inputId, iconId) {
             const input = document.getElementById(inputId);
             const icon = document.getElementById(iconId);
@@ -343,7 +342,6 @@
         const card = document.getElementById('card');
         const submitBtn = document.getElementById('submit-btn');
 
-        // Aura Dynamics & Security Logic
         function updateAura() {
             let filled = 0;
             const passVal = mainPass.value;
@@ -351,7 +349,6 @@
             const hasNum = /[0-9]/.test(passVal);
             const isMatch = passVal === confPass.value && passVal !== "";
 
-            // Security Messages
             if (passVal.length === 0) {
                 passMsg.innerText = "Security: Enter Access Key";
                 passMsg.style.color = "#64748b";
@@ -369,16 +366,13 @@
                 passMsg.style.color = "#22c55e";
             }
 
-            // Glow Progress Calculation
             inputs.forEach(i => { if (i.value.trim().length > 0) filled++; });
             const progress = filled / inputs.length;
 
-            // Dynamic Scaling
             const scale = 0.35 + (progress * 1.8);
             glow.style.transform = `translate(-50%, -50%) scale(${scale})`;
             glow.style.opacity = 0.3 + (progress * 0.5);
 
-            // Color Shifting
             if (progress === 1 && isMatch) {
                 glow.style.background = `radial-gradient(circle, rgba(0, 242, 255, 0.4) 0%, rgba(34, 197, 94, 0.1) 50%, transparent 70%)`;
             } else if (passVal.length > 0 && (!hasUpper || !hasNum)) {
@@ -391,7 +385,6 @@
         function showAuraMessage(text, type = 'error') {
             const box = document.getElementById('message-box');
 
-            // آیکون‌های مدرن
             const errorIcon = `<svg class="msg-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>`;
             const successIcon = `<svg class="msg-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>`;
 
@@ -402,10 +395,8 @@
         </div>
     `;
 
-            // ظاهر شدن با انیمیشن
             box.classList.add('show');
 
-            // اگر خطا بود، بعد از ۵ ثانیه محو بشه
             if (type === 'error') {
                 setTimeout(() => {
                     box.classList.remove('show');
@@ -413,7 +404,6 @@
             }
         }
 
-        //signup form submission logic
 
         document.getElementById('signup-form').addEventListener('submit', async function (e) {
             e.preventDefault();
@@ -422,7 +412,6 @@
             const password = document.querySelector('input[name="password"]').value;
             const confirm = document.querySelector('input[name="confirm"]').value;
 
-            // ۱. چک کردن تطابق پسورد
             if (password !== confirm) {
                 showAuraMessage("Access keys do not match!", "error");
                 card.classList.add('shake');
@@ -430,12 +419,27 @@
                 return;
             }
 
-            // ۲. ذخیره موقت در مرورگر (بدون ارسال به دیتابیس)
-            // اینجا هیچ fetch ای به سرور نمی‌زنیم تا اکانت ساخته نشه
+            try {
+                const checkRes = await fetch("http://localhost:3000/api/auth/check-email", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ email })
+                });
+                const checkData = await checkRes.json();
+                if (!checkRes.ok) {
+                    showAuraMessage(checkData.error || "Email already exists", "error");
+                    card.classList.add('shake');
+                    setTimeout(() => card.classList.remove('shake'), 400);
+                    return;
+                }
+            } catch (err) {
+                showAuraMessage("Connection error. Try again.", "error");
+                return;
+            }
+
             sessionStorage.setItem("pending_email", email);
             sessionStorage.setItem("pending_password", password);
 
-            // ۳. انیمیشن خوشگل AURA
             showAuraMessage("Identity Encrypted. Proceeding...", "success");
 
             const btnText = document.getElementById('btn-text');
@@ -451,7 +455,6 @@
                 }
             }, 1000);
 
-            // ۴. انتقال به صفحه دوم
             setTimeout(() => {
                 window.location.href = "birth&user.html";
             }, 2500);

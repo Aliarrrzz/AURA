@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import bcrypt from "bcrypt";
 import { AppDataSource } from "../config/data-source";
 import { User } from "../entities/user.model";
-import { generateAccessToken, generateRefreshToken } from "../utils/jwt"; 
+import { generateAccessToken, generateRefreshToken } from "../utils/jwt";
 
 const userRepo = AppDataSource.getRepository(User);
 
@@ -10,25 +10,25 @@ const userRepo = AppDataSource.getRepository(User);
 export const signup = async (req: Request, res: Response) => {
   try {
     const { email, password, username, birthdate } = req.body;
-    
+
     if (!email || !password || !username) {
       return res.status(400).json({ error: "Email, password, and username are required" });
     }
 
     const normalizedEmail = email.toLowerCase();
     const existing = await userRepo.findOne({ where: [{ email: normalizedEmail }, { username }] });
-    
+
     if (existing) return res.status(400).json({ error: "Email or Username already exists" });
 
     const hashed = await bcrypt.hash(password, 10);
-    
-    const user = userRepo.create({ 
-      email: normalizedEmail, 
+
+    const user = userRepo.create({
+      email: normalizedEmail,
       password: hashed,
-      username, 
-      birthdate: birthdate ? new Date(birthdate) : undefined 
+      username,
+      birthdate: birthdate ? new Date(birthdate) : undefined
     });
-    
+
     await userRepo.save(user);
 
     // --- بخش Auto-Login ---
@@ -40,9 +40,9 @@ export const signup = async (req: Request, res: Response) => {
       message: "User created and logged in successfully",
       accessToken, // توکن را به فرانت‌اِند برگردان
       refreshToken,
-      user: { 
-        id: user.id, 
-        email: user.email, 
+      user: {
+        id: user.id,
+        email: user.email,
         username: user.username,
         avatar: `https://ui-avatars.com/api/?name=${user.username}&background=8B5CF6&color=fff`
       }
@@ -70,13 +70,29 @@ export const completeProfile = async (req: Request, res: Response) => {
     const payload = { id: user.id, email: user.email };
     const accessToken = generateAccessToken(payload);
 
-    return res.json({ 
-        message: "Profile synchronized successfully!",
-        accessToken, 
-        username: user.username 
+    return res.json({
+      message: "Profile synchronized successfully!",
+      accessToken,
+      username: user.username
     });
   } catch (err) {
     return res.status(500).json({ error: "Sync failed" });
+  }
+};
+
+// ====================== CHECK EMAIL ======================
+export const checkEmail = async (req: Request, res: Response) => {
+  try {
+    const { email } = req.body;
+    if (!email) return res.status(400).json({ error: "Email is required" });
+
+    const existing = await userRepo.findOne({ where: { email: email.toLowerCase() } });
+
+    if (existing) return res.status(400).json({ error: "Email already exists" });
+
+    return res.json({ available: true });
+  } catch (err) {
+    return res.status(500).json({ error: "Check failed" });
   }
 };
 
@@ -120,7 +136,7 @@ export const getMe = async (req: Request, res: Response) => {
       user: {
         id: user.id,
         email: user.email,
-        username: user.username, 
+        username: user.username,
         avatar: `https://ui-avatars.com/api/?name=${user.username || 'User'}&background=8B5CF6&color=fff`
       }
     });

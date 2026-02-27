@@ -298,16 +298,13 @@
         document.getElementById('setup-form').addEventListener('submit', async function (e) {
             e.preventDefault();
 
-            // ۱. استخراج اطلاعات مخفی مرحله قبل از sessionStorage
             const email = sessionStorage.getItem("pending_email");
             const password = sessionStorage.getItem("pending_password");
 
-            // ۲. استخراج اطلاعات فرم فعلی
             const username = document.getElementById('username').value;
             const birthdate = document.getElementById('birthdate').value;
             const submitBtn = e.target.querySelector('button[type="submit"]');
 
-            // اگر اطلاعات مرحله قبل نبود (مثلاً کاربر مستقیم آدرس صفحه را زده)
             if (!email || !password) {
                 showAuraMessage("Session expired. Please start from signup.", "error");
                 setTimeout(() => window.location.href = "signup.html", 2000);
@@ -315,8 +312,7 @@
             }
 
             try {
-                // ۳. ارسال "تمام اطلاعات" به صورت یکجا برای ساخت اکانت
-                const res = await fetch("http://localhost:3000/api/auth/signup", {
+                const res = await fetch("http://localhost:3000/api/auth/signup", { 
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({ email, password, username, birthdate })
@@ -341,13 +337,11 @@
                         submitBtn.disabled = true;
                     }
 
-                    // ۵. انتقال به داشبورد یا صفحه اصلی
                     setTimeout(() => {
                         window.location.href = "main.html";
                     }, 2000);
 
                 } else {
-                    // نمایش خطاهای سرور (مثلاً تکراری بودن یوزرنیم)
                     showAuraMessage(data.error || "Signup failed", "error");
                 }
             } catch (err) {
