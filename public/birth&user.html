@@ -310,9 +310,28 @@
                 setTimeout(() => window.location.href = "signup.html", 2000);
                 return;
             }
+            
+            const birthDate = new Date(birthdate);
+            const today = new Date();
+            let age = today.getFullYear() - birthDate.getFullYear();
+            const monthDiff = today.getMonth() - birthDate.getMonth();
+            if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) age--;
+
+            if (isNaN(birthDate.getTime()) || birthdate === "") {
+                showAuraMessage("Please enter a valid birth date.", "error");
+                return;
+            }
+            if (age < 12) {
+                showAuraMessage("You must be at least 12 years old.", "error");
+                return;
+            }
+            if (age > 120) {
+                showAuraMessage("Please enter a real birth date.", "error");
+                return;
+            }
 
             try {
-                const res = await fetch("http://localhost:3000/api/auth/signup", { 
+                const res = await fetch("http://localhost:3000/api/auth/signup", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({ email, password, username, birthdate })

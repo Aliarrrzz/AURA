@@ -16,9 +16,12 @@ export const signup = async (req: Request, res: Response) => {
     }
 
     const normalizedEmail = email.toLowerCase();
-    const existing = await userRepo.findOne({ where: [{ email: normalizedEmail }, { username }] });
+    
+    const existingEmail = await userRepo.findOne({ where: { email: normalizedEmail } });
+    if (existingEmail) return res.status(400).json({ error: "Email already exists" });
 
-    if (existing) return res.status(400).json({ error: "Email or Username already exists" });
+    const existingUsername = await userRepo.findOne({ where: { username } });
+    if (existingUsername) return res.status(400).json({ error: "Username already exists" });
 
     const hashed = await bcrypt.hash(password, 10);
 
