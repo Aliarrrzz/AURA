@@ -14,7 +14,6 @@
             color: white; margin: 0; min-height: 100vh; overflow-x: hidden;
         }
 
-        /* Background Mesh */
         .bg-mesh {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: 
@@ -23,7 +22,6 @@
             z-index: -1;
         }
 
-        /* Sidebar Glass */
         .sidebar {
             background: rgba(13, 17, 23, 0.4);
             backdrop-filter: blur(20px);
@@ -31,7 +29,6 @@
             transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        /* Dashboard Cards */
         .aura-card {
             background: rgba(255, 255, 255, 0.02);
             border: 1px solid rgba(255, 255, 255, 0.05);
@@ -56,7 +53,6 @@
 
         .aura-card:hover::before { left: 100%; }
 
-        /* Status Glow */
         .status-dot {
             width: 8px; height: 8px; border-radius: 50%;
             background: #00F2FF;
@@ -70,7 +66,6 @@
             100% { transform: scale(1); opacity: 1; }
         }
 
-        /* Custom Scrollbar */
         ::-webkit-scrollbar { width: 5px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 10px; }
@@ -211,7 +206,6 @@
     </main>
 
     <script>
-        // Dashboard Entrance Animation
         document.addEventListener('DOMContentLoaded', () => {
             const cards = document.querySelectorAll('.aura-card');
             cards.forEach((card, index) => {

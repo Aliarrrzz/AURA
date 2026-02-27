@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,84 +8,148 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap');
-        
+
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
             background: #030407;
             min-height: 100vh;
-            display: flex; align-items: center; justify-content: center;
-            color: white; overflow: hidden; margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            overflow: hidden;
+            margin: 0;
         }
 
         .bg-mesh {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: 
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background:
                 radial-gradient(circle at 10% 20%, #1a0b2e 0%, transparent 40%),
                 radial-gradient(circle at 90% 80%, #061a1a 0%, transparent 40%);
             z-index: -1;
         }
 
         @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(30px); filter: blur(10px); }
-            to { opacity: 1; transform: translateY(0); filter: blur(0); }
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+                filter: blur(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+                filter: blur(0);
+            }
         }
 
-        .reveal { animation: fadeInUp 1s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        .reveal {
+            animation: fadeInUp 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
 
         #dynamic-glow {
-            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0.35);
-            width: 800px; height: 800px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.35);
+            width: 800px;
+            height: 800px;
             background: radial-gradient(circle, rgba(139, 92, 246, 0.15) 0%, transparent 70%);
-            filter: blur(80px); border-radius: 50%; z-index: 0;
-            transition: all 1.2s cubic-bezier(0.16, 1, 0.3, 1); opacity: 0.4;
+            filter: blur(80px);
+            border-radius: 50%;
+            z-index: 0;
+            transition: all 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+            opacity: 0.4;
             pointer-events: none;
         }
 
         .recover-card {
-            background: rgba(13, 17, 23, 0.6); backdrop-filter: blur(40px);
-            border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 2.5rem;
-            padding: 3rem 2.5rem; width: 100%; max-width: 480px; position: relative;
-            z-index: 10; box-shadow: 0 40px 120px rgba(0, 0, 0, 0.5);
+            background: rgba(13, 17, 23, 0.6);
+            backdrop-filter: blur(40px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 2.5rem;
+            padding: 3rem 2.5rem;
+            width: 100%;
+            max-width: 480px;
+            position: relative;
+            z-index: 10;
+            box-shadow: 0 40px 120px rgba(0, 0, 0, 0.5);
         }
 
         .input-field {
-            width: 100%; background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 1rem; padding: 1rem 1.25rem; color: white; font-size: 0.9rem;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 1rem;
+            padding: 1rem 1.25rem;
+            color: white;
+            font-size: 0.9rem;
             transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .input-field:focus {
-            outline: none; border-color: #00F2FF; background: rgba(0, 242, 255, 0.04);
+            outline: none;
+            border-color: #00F2FF;
+            background: rgba(0, 242, 255, 0.04);
             box-shadow: 0 0 20px rgba(0, 242, 255, 0.1);
         }
 
         .label-style {
-            display: block; font-size: 0.65rem; font-weight: 800; color: #94a3b8;
-            text-transform: uppercase; letter-spacing: 0.15em; margin-bottom: 0.6rem; margin-left: 0.2rem;
+            display: block;
+            font-size: 0.65rem;
+            font-weight: 800;
+            color: #94a3b8;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            margin-bottom: 0.6rem;
+            margin-left: 0.2rem;
         }
 
         .btn-recover {
-            width: 100%; background: white; color: black;
-            padding: 1.1rem; border-radius: 1rem; font-weight: 800;
-            text-transform: uppercase; letter-spacing: 0.1em; transition: all 0.4s;
+            width: 100%;
+            background: white;
+            color: black;
+            padding: 1.1rem;
+            border-radius: 1rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            transition: all 0.4s;
             margin-top: 1.5rem;
         }
 
-        .btn-recover:disabled { opacity: 0.3; cursor: not-allowed; }
+        .btn-recover:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
 
-        .btn-recover:not(:disabled):hover { 
-            background: #00F2FF; transform: translateY(-2px); 
+        .btn-recover:not(:disabled):hover {
+            background: #00F2FF;
+            transform: translateY(-2px);
             box-shadow: 0 15px 30px rgba(0, 242, 255, 0.3);
         }
 
         .back-link {
-            display: flex; align-items: center; justify-content: center; gap: 8px;
-            margin-top: 2rem; font-size: 0.85rem; color: #64748b; transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 2rem;
+            font-size: 0.85rem;
+            color: #64748b;
+            transition: all 0.3s;
         }
 
-        .back-link:hover { color: #00F2FF; }
+        .back-link:hover {
+            color: #00F2FF;
+        }
     </style>
 </head>
+
 <body>
 
     <div class="bg-mesh"></div>
@@ -92,31 +157,42 @@
 
     <div class="relative w-full max-w-[500px] px-6 reveal">
         <div class="flex flex-col items-center mb-8">
-            <div class="bg-[#8B5CF6] w-14 h-14 rounded-2xl flex items-center justify-center shadow-[0_0_40px_rgba(139,92,246,0.3)] mb-4">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3m-3-3l-2.25-2.25"/></svg>
+            <div
+                class="bg-[#8B5CF6] w-14 h-14 rounded-2xl flex items-center justify-center shadow-[0_0_40px_rgba(139,92,246,0.3)] mb-4">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <path
+                        d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3m-3-3l-2.25-2.25" />
+                </svg>
             </div>
-            <h2 class="text-2xl font-black text-white tracking-tight italic">AURA<span class="text-[#00F2FF]">.</span> RECOVERY</h2>
-            <p class="text-slate-500 text-sm mt-2 text-center uppercase tracking-widest font-bold">Initiate Reset Protocol</p>
+            <h2 class="text-2xl font-black text-white tracking-tight italic">AURA<span class="text-[#00F2FF]">.</span>
+                RECOVERY</h2>
+            <p class="text-slate-500 text-sm mt-2 text-center uppercase tracking-widest font-bold">Initiate Reset
+                Protocol</p>
         </div>
 
         <div class="recover-card">
             <form id="recover-form" class="space-y-6">
                 <div>
                     <label class="label-style">Registered Terminal Email</label>
-                    <input type="email" id="email-input" class="input-field aura-input" placeholder="nexus@domain.com" required>
+                    <input type="email" id="email-input" class="input-field aura-input" placeholder="nexus@domain.com"
+                        required>
                 </div>
 
-                <div id="status-msg" class="text-[10px] font-bold uppercase tracking-[0.2em] text-center opacity-0 transition-all text-[#00F2FF]">
+                <div id="status-msg"
+                    class="text-[10px] font-bold uppercase tracking-[0.2em] text-center opacity-0 transition-all text-[#00F2FF]">
                     Synchronizing with Mainframe...
                 </div>
-                
+
                 <button type="submit" id="submit-btn" class="btn-recover" disabled>
                     Send Reset Link
                 </button>
             </form>
 
             <a href="login.html" class="back-link font-bold uppercase tracking-tighter text-[11px]">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M19 12H5M12 19l-7-7 7-7" />
+                </svg>
                 Back to Authentication
             </a>
         </div>
@@ -131,7 +207,7 @@
         emailInput.addEventListener('input', (e) => {
             const val = e.target.value;
             const isValid = val.includes('@') && val.length > 5;
-            
+
             if (isValid) {
                 submitBtn.disabled = false;
                 glow.style.transform = `translate(-50%, -50%) scale(2.2)`;
@@ -145,17 +221,66 @@
             }
         });
 
-        document.getElementById('recover-form').addEventListener('submit', function(e) {
+        function showAuraMessage(text, type = 'error') {
+            // message box رو اضافه کن به HTML اگه نیست
+            let box = document.getElementById('message-box');
+            if (!box) {
+                box = document.createElement('div');
+                box.id = 'message-box';
+                document.querySelector('.recover-card form').prepend(box);
+            }
+
+            const errorIcon = `<svg style="width:20px;height:20px;flex-shrink:0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>`;
+            const successIcon = `<svg style="width:20px;height:20px;flex-shrink:0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>`;
+
+            const colors = type === 'success'
+                ? { bg: 'rgba(0,242,255,0.05)', color: '#00F2FF', border: '#00F2FF' }
+                : { bg: 'rgba(248,113,113,0.05)', color: '#f87171', border: '#f87171' };
+
+            box.innerHTML = `
+            <div style="display:flex;align-items:center;gap:12px;padding:0.8rem 1rem;border-radius:12px;font-size:0.85rem;font-weight:600;background:${colors.bg};color:${colors.color};border-left:3px solid ${colors.border};margin-bottom:1rem;">
+                ${type === 'success' ? successIcon : errorIcon}
+                <span>${text}</span>
+            </div>`;
+
+            if (type === 'error') setTimeout(() => box.innerHTML = '', 5000);
+        }
+
+        document.getElementById('recover-form').addEventListener('submit', async function (e) {
             e.preventDefault();
+
+            const email = document.getElementById('email-input').value;
             submitBtn.innerHTML = "Linking...";
+            submitBtn.disabled = true;
             submitBtn.style.background = "#00F2FF";
-            statusMsg.classList.remove('opacity-0');
-            
-            setTimeout(() => {
-                alert("Protocol sequence sent. Check your neural inbox.");
-                submitBtn.innerHTML = "Link Dispatched";
-            }, 1500);
+
+            try {
+                const res = await fetch("http://localhost:3000/api/auth/forgot-password", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ email })
+                });
+
+                const data = await res.json();
+
+                if (res.ok) {
+                    statusMsg.classList.remove('opacity-0');
+                    submitBtn.innerHTML = "Link Dispatched ✓";
+                    showAuraMessage("Reset link sent! Check your inbox.", "success");
+                } else {
+                    submitBtn.innerHTML = "Send Reset Link";
+                    submitBtn.disabled = false;
+                    submitBtn.style.background = "white";
+                    showAuraMessage(data.error || "Something went wrong.", "error");
+                }
+            } catch (err) {
+                submitBtn.innerHTML = "Send Reset Link";
+                submitBtn.disabled = false;
+                submitBtn.style.background = "white";
+                showAuraMessage("Connection error. Try again.", "error");
+            }
         });
     </script>
 </body>
+
 </html>

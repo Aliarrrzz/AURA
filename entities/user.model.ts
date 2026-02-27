@@ -19,4 +19,10 @@ export class User {
 
   @Column({ type: "date", nullable: true })
   birthdate!: Date;
+
+  @Column({ nullable: true })
+  resetToken!: string;
+
+  @Column({ nullable: true })
+  resetTokenExpiry!: Date;
 }

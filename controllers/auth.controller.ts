@@ -1,5 +1,7 @@
 import { Request, Response } from "express";
 import bcrypt from "bcrypt";
+import transporter from "../config/mail";
+import crypto from "crypto";
 import { AppDataSource } from "../config/data-source";
 import { User } from "../entities/user.model";
 import { generateAccessToken, generateRefreshToken } from "../utils/jwt";
@@ -16,7 +18,7 @@ export const signup = async (req: Request, res: Response) => {
     }
 
     const normalizedEmail = email.toLowerCase();
-    
+
     const existingEmail = await userRepo.findOne({ where: { email: normalizedEmail } });
     if (existingEmail) return res.status(400).json({ error: "Email already exists" });
 
@@ -34,14 +36,13 @@ export const signup = async (req: Request, res: Response) => {
 
     await userRepo.save(user);
 
-    // --- بخش Auto-Login ---
     const payload = { id: user.id, email: user.email };
     const accessToken = generateAccessToken(payload);
     const refreshToken = generateRefreshToken(payload);
 
     return res.status(201).json({
       message: "User created and logged in successfully",
-      accessToken, // توکن را به فرانت‌اِند برگردان
+      accessToken,
       refreshToken,
       user: {
         id: user.id,
@@ -145,5 +146,70 @@ export const getMe = async (req: Request, res: Response) => {
     });
   } catch (err) {
     return res.status(500).json({ error: "Failed to fetch user" });
+  }
+};
+//===================forgot password==============================
+export const forgotPassword = async (req: Request, res: Response) => {
+  try {
+    const { email } = req.body;
+    if (!email) return res.status(400).json({ error: "Email is required" });
+
+    const user = await userRepo.findOne({ where: { email: email.toLowerCase() } });
+    if (!user) return res.status(404).json({ error: "No account found with this email" });
+
+    const resetToken = crypto.randomBytes(32).toString("hex");
+    const resetExpiry = new Date(Date.now() + 1000 * 60 * 30); // 30 دقیقه
+
+    user.resetToken = resetToken;
+    user.resetTokenExpiry = resetExpiry;
+    await userRepo.save(user);
+
+    const resetLink = `http://localhost:3000/reset-password.html?token=${resetToken}`;
+
+    await transporter.sendMail({
+      from: `"AURA System" <${process.env.GMAIL_USER}>`,
+      to: user.email,
+      subject: "AURA | Reset Access Protocol",
+      html: `
+        <div style="background:#030407;color:white;padding:40px;font-family:sans-serif;border-radius:16px;">
+          <h2 style="color:#00F2FF;">AURA Recovery Protocol</h2>
+          <p>A reset request was initiated for your account.</p>
+          <a href="${resetLink}" style="display:inline-block;margin-top:20px;padding:12px 24px;background:#8B5CF6;color:white;border-radius:8px;text-decoration:none;font-weight:bold;">
+            Reset Access Key
+          </a>
+          <p style="margin-top:20px;color:#64748b;font-size:12px;">This link expires in 30 minutes.</p>
+        </div>
+      `,
+    });
+
+    return res.json({ message: "Reset link sent successfully" });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ error: "Failed to send reset email" });
+  }
+};
+
+// ====================== RESET PASSWORD ======================
+export const resetPassword = async (req: Request, res: Response) => {
+  try {
+    const { token, password } = req.body;
+
+    if (!token || !password) return res.status(400).json({ error: "Token and password are required" });
+
+    const user = await userRepo.findOne({ where: { resetToken: token } });
+    if (!user) return res.status(400).json({ error: "Invalid or expired reset link" });
+
+    if (!user.resetTokenExpiry || user.resetTokenExpiry < new Date()) {
+      return res.status(400).json({ error: "Reset link has expired" });
+    }
+
+    user.password = await bcrypt.hash(password, 10);
+    user.resetToken = null!;
+    user.resetTokenExpiry = null!;
+    await userRepo.save(user);
+
+    return res.json({ message: "Password updated successfully" });
+  } catch (err) {
+    return res.status(500).json({ error: "Reset failed" });
   }
 };
