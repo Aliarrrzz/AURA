@@ -229,7 +229,6 @@
             flex-shrink: 0;
         }
 
-        /* Shake Animation for Errors */
         @keyframes shake {
 
             0%,
@@ -401,14 +400,12 @@
                 const data = await res.json();
 
                 if (res.ok) {
-                    // ذخیره‌سازی
                     localStorage.setItem("accessToken", data.accessToken);
                     localStorage.setItem("username", data.user.username);
                     localStorage.setItem("avatar", data.user.avatar);
 
                     showAuraMessage("Identity Confirmed. Syncing...", "success");
 
-                    // غیرفعال کردن دکمه برای جلوگیری از کلیک مجدد
                     const submitBtn = e.target.querySelector('button[type="submit"]');
                     if (submitBtn) {
                         submitBtn.style.background = "#00F2FF";

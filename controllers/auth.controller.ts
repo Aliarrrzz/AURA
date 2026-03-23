@@ -183,8 +183,7 @@ export const forgotPassword = async (req: Request, res: Response) => {
     if (!user) return res.status(404).json({ error: "No account found with this email" });
 
     const resetToken = crypto.randomBytes(32).toString("hex");
-    const resetExpiry = new Date(Date.now() + 1000 * 60 * 30); // 30 دقیقه
-
+    const resetExpiry = new Date(Date.now() + 1000 * 60 * 30); 
     user.resetToken = resetToken;
     user.resetTokenExpiry = resetExpiry;
     await userRepo.save(user);

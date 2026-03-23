@@ -45,7 +45,7 @@
         }
 
         html[lang="fa"] {
-          direction: rtl; /* راست به چپ */
+          direction: rtl; 
           text-align: right; 
           font-family: 'Vazirmatn', sans-serif !important;
         }
@@ -508,11 +508,9 @@
         const langSwitch = document.getElementById("lang-switch");
         const langThumb = document.getElementById("lang-toggle-thumb");
 
-        // بررسی زبان ذخیره شده
         const savedLang = localStorage.getItem("site-lang") || "en";
-        setLanguage(savedLang, false); // false یعنی انیمیشن toggle اولیه نداشته باشه
+        setLanguage(savedLang, false);
 
-        // هنگام کلیک روی toggle
         langSwitch.addEventListener("click", () => {
             const newLang = document.documentElement.lang === "en" ? "fa" : "en";
             setLanguage(newLang, true);
@@ -523,7 +521,6 @@
             document.documentElement.lang = lang;
             document.documentElement.dir = (lang === "fa") ? "rtl" : "ltr";
 
-            // حرکت toggle thumb
             if (lang === "fa") {
                 langThumb.style.left = "50%";
                 langThumb.textContent = "FA";
@@ -538,7 +535,6 @@
                 langThumb.style.transition = "none";
             }
 
-            // تغییر متن سایت
             if (lang === "fa") {
                 translateToPersian();
             } else {
@@ -546,17 +542,14 @@
             }
         }
 
-        // توابع نمونه ترجمه
         function translateToPersian() {
             document.querySelector("h1").innerHTML = "هر آورا <span class='text-primary'>گروه</span> خود را پیدا می‌کند.";
             document.querySelector("p").textContent = "لایه ارتباطی با کیفیت بالا برای نسل بعدی گیمرها.";
-            // ادامه سایر متن‌ها...
         }
 
         function translateToEnglish() {
             document.querySelector("h1").innerHTML = "Where every <span class='text-primary'>aura</span> finds its squad.";
             document.querySelector("p").textContent = "The high-fidelity communication layer for the next generation of gamers.";
-            // ادامه سایر متن‌ها...
         }
     </script>
     <script>
@@ -584,12 +577,10 @@
         const section = document.getElementById('features');
         const litCards = document.querySelectorAll('.feature-card-lit');
         const cone = document.getElementById('spotlight-cone');
-        // Physics Configuration
         const numPoints = 20;
         const ropeLengthTotal = 260;
         const segmentLength = ropeLengthTotal / (numPoints - 1);
         let points = [];
-        // Physics constants for natural feel
         const gravity = 0.45;
         const friction = 0.985;
         const constraintIterations = 15;
@@ -623,7 +614,6 @@
             if (isDragging) {
                 const lastPoint = points[numPoints - 1];
                 const rect = section.getBoundingClientRect();
-                // Stronger pull when dragging for responsiveness
                 lastPoint.x += (mouseX - lastPoint.x) * 0.5;
                 lastPoint.y += (mouseY - lastPoint.y) * 0.5;
             }
@@ -650,29 +640,23 @@
         }
         function render() {
             updatePhysics();
-            // Render Rope as a smooth cubic bezier curve
             let pathData = `M ${points[0].x} ${points[0].y}`;
             for (let i = 1; i < points.length - 2; i++) {
                 const xc = (points[i].x + points[i + 1].x) / 2;
                 const yc = (points[i].y + points[i + 1].y) / 2;
                 pathData += ` Q ${points[i].x} ${points[i].y}, ${xc} ${yc}`;
             }
-            // Curve through last two points
             pathData += ` Q ${points[numPoints - 2].x} ${points[numPoints - 2].y}, ${points[numPoints - 1].x} ${points[numPoints - 1].y}`;
             ropePath.setAttribute('d', pathData);
-            // Anchor Lamp to last point
             const lastPoint = points[numPoints - 1];
             const pPrev = points[numPoints - 2];
-            // Calculate orientation based on the last segment for a natural swing tilt
             const angleRad = Math.atan2(lastPoint.y - pPrev.y, lastPoint.x - pPrev.x) - Math.PI / 2;
-            // Positioning lamp: center is offset by 40px (half width)
             lamp.style.transform = `translate(${lastPoint.x - 40}px, ${lastPoint.y}px) rotate(${angleRad}rad)`;
             updateCardMasks(lastPoint.x, lastPoint.y, angleRad);
             requestAnimationFrame(render);
         }
         function updateCardMasks(lampX, lampY, angleRad) {
             const sectionRect = section.getBoundingClientRect();
-            // Beam originates from the bottom center of the lamp head
             const beamLocalOffsetY = 40;
             const beamOriginX = lampX + Math.sin(-angleRad) * beamLocalOffsetY;
             const beamOriginY = lampY + Math.cos(angleRad) * beamLocalOffsetY;
@@ -684,7 +668,6 @@
             litCards.forEach(card => {
                 const wrapper = card.closest('.feature-card-wrapper');
                 const wrapperRect = wrapper.getBoundingClientRect();
-                // Point coordinates relative to the wrapper
                 const localX = beamOriginX - wrapperRect.left - window.scrollX;
                 const localY = (beamOriginY + sectionRect.top) - wrapperRect.top;
                 const x1 = localX + Math.cos(leftAngle) * coneDistance;
@@ -727,7 +710,6 @@
             const storedName = localStorage.getItem("username");
             const storedAvatar = localStorage.getItem("avatar");
 
-            // ۱. نمایش سریع از حافظه (فقط اگر اسم شامل @ نباشد)
             if (token && storedName && !storedName.includes('@')) {
                 updateUserUI(storedName, storedAvatar);
             }
@@ -745,7 +727,6 @@
                     if (response.ok) {
                         const data = await response.json();
 
-                        // منطق بک‌اِند را اینجا هم چک می‌کنیم: اگر یوزرنیم نبود، یک نام پیش‌فرض
                         const realUsername = data.user.username && !data.user.username.includes('@')
                             ? data.user.username
                             : "Aura User";
@@ -766,13 +747,10 @@
         function updateUserUI(name, avatarUrl) {
             const authSection = document.getElementById("auth-section");
 
-            // اگه اسم شامل اعداد و حروف نامفهوم بود یا شبیه تیکه اول ایمیل بود
-            // اینجا یه فیلتر میذاریم که فقط اگه یوزرنیم واقعی بود نشون بده
             let cleanName = name;
 
-            // یه چک ساده: اگه یوزرنیم نداشتی یا یوزرنیمت خیلی شبیه ایمیل بود
             if (!name || name.length > 15 || /^[a-z0-9]{8,}$/.test(name)) {
-                cleanName = "Explorer"; // یا هر اسم پیش‌فرض دیگه‌ای
+                cleanName = "Explorer"; 
             }
 
             const finalAvatar = avatarUrl || `https://ui-avatars.com/api/?name=${cleanName}&background=8B5CF6&color=fff`;
@@ -799,7 +777,7 @@
         }
 
         function handleLogout() {
-            localStorage.clear(); // پاک کردن کلی برای اطمینان
+            localStorage.clear(); 
             window.location.reload();
         }
 
