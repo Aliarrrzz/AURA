@@ -260,7 +260,7 @@
         <div class="flex flex-col items-center mb-10">
             <div
                 class="bg-black w-14 h-14 rounded-full flex items-center justify-center border border-white/10 shadow-xl mb-4 transition-transform duration-500 hover:rotate-90">
-                <img src="https://i.postimg.cc/5NpdTNY8/A3fa9d42040054ea1b982ca73218be2f33-png.jpg" alt="Logo"
+                <img src="aura-png.jpg" alt="Logo"
                     class="w-10 h-10 object-cover rounded-full">
             </div>
             <span class="text-3xl font-black text-white tracking-tighter italic">AURA<span
@@ -324,7 +324,6 @@
     </div>
 
     <script>
-        // ======================= AURA EFFECT LOGIC =======================
         const inputs = document.querySelectorAll('.aura-input');
         const glow = document.getElementById('dynamic-glow');
         const submitBtn = document.getElementById('submit-btn');
@@ -361,10 +360,9 @@
         inputs.forEach(input => {
             input.addEventListener('input', updateAura);
         });
-        //======================= END OF AURA EFFECT LOGIC ======================
     </script>
     <script>
-        // ======================= LOGIN SUBMIT LOGIC =======================
+
         const loginCard = document.querySelector('.login-card');
 
         function showAuraMessage(text, type = 'error') {

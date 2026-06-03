@@ -1,6 +1,5 @@
 <!DOCTYPE html>
-<html class="scroll-smooth dark" lang="en" ,>
-
+<html class="scroll-smooth dark" lang="en">
 
 <head>
     <meta charset="utf-8" />
@@ -9,10 +8,9 @@
     <link href="https://fonts.googleapis.com" rel="preconnect" />
     <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
     <link
-        href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap"
+        href="https://fonts.googleapis.com"
         rel="stylesheet" />
-    <link
-        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
         rel="stylesheet" />
     <script src="https://cdn.tailwindcss.com?plugins=forms,typography,container-queries"></script>
     <script>
@@ -45,13 +43,9 @@
         }
 
         html[lang="fa"] {
-          direction: rtl; 
-          text-align: right; 
+          direction: rtl;
+          text-align: right;
           font-family: 'Vazirmatn', sans-serif !important;
-        }
-
-        html[lang="fa"] nav, html[lang="fa"] footer {
-           text-align: right;
         }
 
         :root {
@@ -91,20 +85,14 @@
             transform-origin: top center;
             will-change: transform;
         }
-        .lamp-interactive-area:active {
-            cursor: grabbing;
-        }
+        .lamp-interactive-area:active { cursor: grabbing; }
         .lamp-handle {
-            width: 12px;
-            height: 12px;
-            background: #475569;
-            border-radius: 50%;
-            margin-bottom: -4px;
-            border: 2px solid #1e293b;
+            width: 12px; height: 12px;
+            background: #475569; border-radius: 50%;
+            margin-bottom: -4px; border: 2px solid #1e293b;
         }
         .lamp-head {
-            width: 72px;
-            height: 42px;
+            width: 72px; height: 42px;
             background: #1e293b;
             clip-path: polygon(25% 0%, 75% 0%, 100% 100%, 0% 100%);
             position: relative;
@@ -112,34 +100,22 @@
             box-shadow: 0 15px 50px rgba(251, 191, 36, 0.5);
         }
         .lamp-bulb-glow {
-            position: absolute;
-            bottom: -8px;
-            left: 50%;
+            position: absolute; bottom: -8px; left: 50%;
             transform: translateX(-50%);
-            width: 40px;
-            height: 12px;
-            background: #fbbf24;
-            filter: blur(12px);
-            border-radius: 50%;
+            width: 40px; height: 12px;
+            background: #fbbf24; filter: blur(12px); border-radius: 50%;
         }
         .spotlight-cone-visual {
-            position: absolute;
-            top: 42px;
-            left: 50%;
+            position: absolute; top: 42px; left: 50%;
             transform: translateX(-50%);
-            width: 1600px;
-            height: 1400px;
+            width: 1600px; height: 1400px;
             background: radial-gradient(circle at top center, rgba(251, 191, 36, 0.3) 0%, transparent 70%);
             clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
-            pointer-events: none;
-            z-index: 45;
-            opacity: 0.85;
-            transform-origin: top center;
-            will-change: transform;
+            pointer-events: none; z-index: 45; opacity: 0.85;
+            transform-origin: top center; will-change: transform;
         }
         .feature-card-wrapper {
-            position: relative;
-            overflow: hidden;
+            position: relative; overflow: hidden;
             border-radius: 1.5rem;
             background: rgba(15, 23, 42, 0.6);
             height: 320px;
@@ -150,65 +126,156 @@
             box-shadow: 0 20px 60px rgba(139, 92, 246, 0.3);
         }
         #cursor-bg {
-           position: fixed;
-           inset: 0;
-           pointer-events: none;
-           z-index: 0;
-           background: radial-gradient(
-              circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
-            rgba(139, 92, 246, 0.25),
-            rgba(0, 242, 255, 0.15),
-              transparent 40%
-          );
-          transition: background 0.15s ease;
-          mix-blend-mode: screen;
-        }
-        #ambient-bg {
-           background: radial-gradient(circle at 20% 30%, rgba(255, 200, 0, 0.2), transparent 50%),
-                       radial-gradient(circle at 80% 70%, rgba(0, 242, 255, 0.2), transparent 50%);
-           animation: moveLights 20s linear infinite;
-           mix-blend-mode: screen;
-        }
-        @keyframes moveLights {
-            0% { background-position: 0% 0%, 100% 100%; }
-            50% { background-position: 100% 50%, 0% 50%; }
-            100% { background-position: 0% 0%, 100% 100%; }
+            position: fixed; inset: 0; pointer-events: none; z-index: 0;
+            background: radial-gradient(circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(139, 92, 246, 0.25), rgba(0, 242, 255, 0.15), transparent 40%);
+            transition: background 0.15s ease; mix-blend-mode: screen;
         }
         .feature-card-dark {
             @apply p-8 h-full border border-white/5 bg-slate-900/40 backdrop-blur-xl transition-colors duration-300;
         }
         .feature-card-lit {
-            position: absolute;
-            inset: 0;
+            position: absolute; inset: 0;
             @apply p-8 h-full bg-gradient-to-br from-amber-400 to-orange-500 text-slate-950;
             clip-path: var(--spotlight-mask);
-            pointer-events: none;
-            z-index: 10;
-            will-change: clip-path;
+            pointer-events: none; z-index: 10; will-change: clip-path;
         }
         .glass-nav {
             background: rgba(6, 7, 10, 0.85);
             backdrop-filter: blur(16px);
             border-bottom: 1px solid rgba(255, 255, 255, 0.05);
         }
-        .neon-text {
-             text-shadow: 0 0 8px rgba(139,92,246,0.7), 0 0 15px rgba(0,242,255,0.5);
+
+        .about-grid-line {
+            position: absolute;
+            background: linear-gradient(90deg, transparent, rgba(139,92,246,0.3), transparent);
+            height: 1px; width: 100%;
         }
-        #lang-switch:hover #lang-toggle-thumb {
-            transform: scale(1.05);
+        .about-pill {
+            display: inline-flex; align-items: center; gap: 8px;
+            padding: 6px 16px;
+            border-radius: 999px;
+            border: 1px solid rgba(139,92,246,0.3);
+            background: rgba(139,92,246,0.08);
+            font-size: 0.75rem; font-weight: 700;
+            text-transform: uppercase; letter-spacing: 0.1em;
+            color: #a78bfa;
+        }
+        .about-stat-card {
+            position: relative; overflow: hidden;
+            padding: 2rem;
+            border-radius: 1.25rem;
+            border: 1px solid rgba(255,255,255,0.06);
+            background: rgba(15,23,42,0.5);
+            backdrop-filter: blur(12px);
+            transition: border-color 0.3s, transform 0.3s;
+        }
+        .about-stat-card:hover {
+            border-color: rgba(139,92,246,0.4);
+            transform: translateY(-4px);
+        }
+        .about-stat-card::before {
+            content: '';
+            position: absolute; inset: 0;
+            background: radial-gradient(circle at top left, rgba(139,92,246,0.12), transparent 60%);
+            pointer-events: none;
+        }
+        .about-visual-blob {
+            position: absolute;
+            border-radius: 9999px;
+            filter: blur(80px);
+            pointer-events: none;
+        }
+        .marquee-track {
+            display: flex; gap: 2rem;
+            animation: marquee 20s linear infinite;
+            white-space: nowrap;
+        }
+        @keyframes marquee {
+            from { transform: translateX(0); }
+            to { transform: translateX(-50%); }
         }
 
+        .team-card {
+            position: relative; overflow: hidden;
+            border-radius: 1.5rem;
+            border: 1px solid rgba(255,255,255,0.06);
+            background: rgba(10,12,20,0.7);
+            backdrop-filter: blur(16px);
+            transition: transform 0.4s cubic-bezier(0.23,1,0.32,1), border-color 0.3s, box-shadow 0.4s;
+            cursor: pointer;
+        }
+        .team-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            border-color: rgba(139,92,246,0.5);
+            box-shadow: 0 30px 60px rgba(139,92,246,0.2), 0 0 0 1px rgba(139,92,246,0.1);
+        }
+        .team-card-glow {
+            position: absolute; inset: 0; opacity: 0;
+            background: radial-gradient(circle at 50% 0%, rgba(139,92,246,0.15), transparent 70%);
+            transition: opacity 0.4s;
+            pointer-events: none;
+        }
+        .team-card:hover .team-card-glow { opacity: 1; }
+        .team-avatar-ring {
+            position: relative;
+            width: 96px; height: 96px;
+            border-radius: 9999px;
+            padding: 3px;
+            background: linear-gradient(135deg, #8B5CF6, #00F2FF, #FBBF24);
+            margin: 0 auto 1.25rem;
+            transition: transform 0.4s;
+        }
+        .team-card:hover .team-avatar-ring { transform: scale(1.05) rotate(3deg); }
+        .team-avatar-inner {
+            width: 100%; height: 100%;
+            border-radius: 9999px;
+            overflow: hidden;
+            border: 3px solid #06070A;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 2rem; font-weight: 800;
+        }
+        .team-role-badge {
+            display: inline-block;
+            padding: 3px 12px;
+            border-radius: 999px;
+            font-size: 0.7rem; font-weight: 700;
+            text-transform: uppercase; letter-spacing: 0.08em;
+        }
+        .team-social-link {
+            width: 32px; height: 32px;
+            border-radius: 8px;
+            border: 1px solid rgba(255,255,255,0.1);
+            background: rgba(255,255,255,0.05);
+            display: flex; align-items: center; justify-content: center;
+            transition: all 0.2s;
+        }
+        .team-social-link:hover {
+            border-color: rgba(139,92,246,0.5);
+            background: rgba(139,92,246,0.15);
+            color: #a78bfa;
+        }
+        .team-section-bg {
+            background:
+                radial-gradient(circle at 15% 50%, rgba(139,92,246,0.08) 0%, transparent 50%),
+                radial-gradient(circle at 85% 20%, rgba(0,242,255,0.06) 0%, transparent 50%);
+        }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.7s ease, transform 0.7s ease;
+        }
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
     </style>
 </head>
 
 <body class="bg-background-dark text-slate-100 font-sans antialiased overflow-x-hidden">
     <div id="cursor-bg"></div>
-    <div class="mt-8 text-center">
-        <button id="lang-toggle"
-            class="bg-primary hover:bg-primary/80 text-white px-5 py-2 rounded-full font-bold transition-all">
-            فارسی
-        </button>
-    </div>ّ
+
+    <!-- NAV -->
     <nav class="fixed top-0 w-full z-[100] glass-nav">
         <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
             <div class="flex items-center gap-2">
@@ -221,9 +288,9 @@
             <div
                 class="hidden md:flex items-center gap-10 text-sm font-semibold tracking-wide uppercase text-slate-400">
                 <a class="hover:text-neon transition-colors" href="#features">The Advantage</a>
-                <a class="hover:text-neon transition-colors" href="#">Squads</a>
+                <a class="hover:text-neon transition-colors" href="#about">About</a>
+                <a class="hover:text-neon transition-colors" href="#team">Team</a>
                 <a class="hover:text-neon transition-colors" href="#">Nexus</a>
-                <a class="hover:text-neon transition-colors" href="#">Pulse</a>
             </div>
             <div id="auth-section">
                 <button id="login-btn" onclick="window.location.href='login.html'"
@@ -233,6 +300,8 @@
             </div>
         </div>
     </nav>
+
+    <!-- HERO -->
     <header class="relative pt-48 pb-32 overflow-hidden">
         <div
             class="absolute top-0 left-1/2 -translate-x-1/2 w-[1200px] h-[600px] bg-primary/20 blur-[140px] rounded-full -z-10 opacity-50">
@@ -252,8 +321,7 @@
             <div class="flex flex-wrap justify-center gap-6">
                 <button
                     class="bg-white text-slate-950 px-10 py-5 rounded-2xl font-bold flex items-center gap-3 hover:shadow-[0_0_30px_rgba(255,255,255,0.2)] hover:-translate-y-1 transition-all">
-                    <span class="material-symbols-outlined">download</span>
-                    Download Desktop
+                    <span class="material-symbols-outlined">download</span> Download Desktop
                 </button>
                 <button
                     class="bg-slate-800/50 backdrop-blur border border-white/10 px-10 py-5 rounded-2xl font-bold hover:bg-slate-800 transition-all">
@@ -262,6 +330,8 @@
             </div>
         </div>
     </header>
+
+    <!-- FEATURES -->
     <section class="relative py-40 bg-background-dark overflow-visible" id="features">
         <div class="rope-container" id="rope-container">
             <svg class="rope-svg" id="rope-svg">
@@ -290,12 +360,12 @@
                     tech powering your next session.</p>
             </div>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 relative" id="cards-container">
+                <!-- Card 1 -->
                 <div class="feature-card-wrapper">
                     <div class="feature-card-dark">
                         <div
                             class="w-14 h-14 bg-primary/10 rounded-2xl flex items-center justify-center text-primary mb-8 border border-primary/20">
-                            <span class="material-symbols-outlined text-3xl">spatial_audio_off</span>
-                        </div>
+                            <span class="material-symbols-outlined text-3xl">spatial_audio_off</span></div>
                         <h3 class="text-2xl font-bold mb-4 text-white">Spatial Engine</h3>
                         <p class="text-slate-400 leading-relaxed">Proprietary 3D audio that maps your squad's voices to
                             their in-game positions.</p>
@@ -303,19 +373,18 @@
                     <div class="feature-card-lit">
                         <div
                             class="w-14 h-14 bg-black/10 rounded-2xl flex items-center justify-center text-black mb-8 border border-black/10">
-                            <span class="material-symbols-outlined text-3xl">spatial_audio_off</span>
-                        </div>
+                            <span class="material-symbols-outlined text-3xl">spatial_audio_off</span></div>
                         <h3 class="text-2xl font-bold mb-4">Spatial Engine</h3>
                         <p class="font-medium">Proprietary 3D audio that maps your squad's voices to their in-game
                             positions.</p>
                     </div>
                 </div>
+                <!-- Card 2 -->
                 <div class="feature-card-wrapper">
                     <div class="feature-card-dark">
                         <div
                             class="w-14 h-14 bg-primary/10 rounded-2xl flex items-center justify-center text-primary mb-8 border border-primary/20">
-                            <span class="material-symbols-outlined text-3xl">bolt</span>
-                        </div>
+                            <span class="material-symbols-outlined text-3xl">bolt</span></div>
                         <h3 class="text-2xl font-bold mb-4 text-white">Zero Ghosting</h3>
                         <p class="text-slate-400 leading-relaxed">Global edge nodes ensure 12ms average latency across
                             any continent.</p>
@@ -323,18 +392,17 @@
                     <div class="feature-card-lit">
                         <div
                             class="w-14 h-14 bg-black/10 rounded-2xl flex items-center justify-center text-black mb-8 border border-black/10">
-                            <span class="material-symbols-outlined text-3xl">bolt</span>
-                        </div>
+                            <span class="material-symbols-outlined text-3xl">bolt</span></div>
                         <h3 class="text-2xl font-bold mb-4">Zero Ghosting</h3>
                         <p class="font-medium">Global edge nodes ensure 12ms average latency across any continent.</p>
                     </div>
                 </div>
+                <!-- Card 3 -->
                 <div class="feature-card-wrapper">
                     <div class="feature-card-dark">
                         <div
                             class="w-14 h-14 bg-primary/10 rounded-2xl flex items-center justify-center text-primary mb-8 border border-primary/20">
-                            <span class="material-symbols-outlined text-3xl">security</span>
-                        </div>
+                            <span class="material-symbols-outlined text-3xl">security</span></div>
                         <h3 class="text-2xl font-bold mb-4 text-white">Vault Privacy</h3>
                         <p class="text-slate-400 leading-relaxed">Military-grade E2E encryption for all direct and group
                             communications.</p>
@@ -342,19 +410,18 @@
                     <div class="feature-card-lit">
                         <div
                             class="w-14 h-14 bg-black/10 rounded-2xl flex items-center justify-center text-black mb-8 border border-black/10">
-                            <span class="material-symbols-outlined text-3xl">security</span>
-                        </div>
+                            <span class="material-symbols-outlined text-3xl">security</span></div>
                         <h3 class="text-2xl font-bold mb-4">Vault Privacy</h3>
                         <p class="font-medium">Military-grade E2E encryption for all direct and group communications.
                         </p>
                     </div>
                 </div>
+                <!-- Card 4 -->
                 <div class="feature-card-wrapper">
                     <div class="feature-card-dark">
                         <div
                             class="w-14 h-14 bg-primary/10 rounded-2xl flex items-center justify-center text-primary mb-8 border border-primary/20">
-                            <span class="material-symbols-outlined text-3xl">hub</span>
-                        </div>
+                            <span class="material-symbols-outlined text-3xl">hub</span></div>
                         <h3 class="text-2xl font-bold mb-4 text-white">Dynamic Hubs</h3>
                         <p class="text-slate-400 leading-relaxed">Seamlessly bridge different game servers into a single
                             unified dashboard.</p>
@@ -362,19 +429,18 @@
                     <div class="feature-card-lit">
                         <div
                             class="w-14 h-14 bg-black/10 rounded-2xl flex items-center justify-center text-black mb-8 border border-black/10">
-                            <span class="material-symbols-outlined text-3xl">hub</span>
-                        </div>
+                            <span class="material-symbols-outlined text-3xl">hub</span></div>
                         <h3 class="text-2xl font-bold mb-4">Dynamic Hubs</h3>
                         <p class="font-medium">Seamlessly bridge different game servers into a single unified dashboard.
                         </p>
                     </div>
                 </div>
+                <!-- Card 5 -->
                 <div class="feature-card-wrapper">
                     <div class="feature-card-dark">
                         <div
                             class="w-14 h-14 bg-primary/10 rounded-2xl flex items-center justify-center text-primary mb-8 border border-primary/20">
-                            <span class="material-symbols-outlined text-3xl">shield_person</span>
-                        </div>
+                            <span class="material-symbols-outlined text-3xl">shield_person</span></div>
                         <h3 class="text-2xl font-bold mb-4 text-white">AI Aegis</h3>
                         <p class="text-slate-400 leading-relaxed">Self-learning moderation tools that kill toxicity
                             before it starts.</p>
@@ -382,18 +448,17 @@
                     <div class="feature-card-lit">
                         <div
                             class="w-14 h-14 bg-black/10 rounded-2xl flex items-center justify-center text-black mb-8 border border-black/10">
-                            <span class="material-symbols-outlined text-3xl">shield_person</span>
-                        </div>
+                            <span class="material-symbols-outlined text-3xl">shield_person</span></div>
                         <h3 class="text-2xl font-bold mb-4">AI Aegis</h3>
                         <p class="font-medium">Self-learning moderation tools that kill toxicity before it starts.</p>
                     </div>
                 </div>
+                <!-- Card 6 -->
                 <div class="feature-card-wrapper">
                     <div class="feature-card-dark">
                         <div
                             class="w-14 h-14 bg-primary/10 rounded-2xl flex items-center justify-center text-primary mb-8 border border-primary/20">
-                            <span class="material-symbols-outlined text-3xl">auto_fix</span>
-                        </div>
+                            <span class="material-symbols-outlined text-3xl">auto_fix</span></div>
                         <h3 class="text-2xl font-bold mb-4 text-white">Neon Custom</h3>
                         <p class="text-slate-400 leading-relaxed">Full CSS skinning support for profiles and community
                             homepages.</p>
@@ -401,8 +466,7 @@
                     <div class="feature-card-lit">
                         <div
                             class="w-14 h-14 bg-black/10 rounded-2xl flex items-center justify-center text-black mb-8 border border-black/10">
-                            <span class="material-symbols-outlined text-3xl">auto_fix</span>
-                        </div>
+                            <span class="material-symbols-outlined text-3xl">auto_fix</span></div>
                         <h3 class="text-2xl font-bold mb-4">Neon Custom</h3>
                         <p class="font-medium">Full CSS skinning support for profiles and community homepages.</p>
                     </div>
@@ -410,6 +474,310 @@
             </div>
         </div>
     </section>
+
+    <section id="about" class="relative py-32 border-t border-white/5 overflow-hidden">
+
+        <div class="about-visual-blob w-[500px] h-[500px] bg-primary/10 top-0 -left-40 absolute"></div>
+        <div class="about-visual-blob w-[400px] h-[400px] bg-neon/8 bottom-0 right-0 absolute"></div>
+
+        <div class="max-w-7xl mx-auto px-6 relative z-10">
+            <div class="text-center mb-20 reveal">
+                <div class="about-pill mb-6">
+                    <span class="material-symbols-outlined text-sm">info</span>
+                    Our Story
+                </div>
+                <h2 class="font-display text-4xl md:text-6xl font-extrabold tracking-tight text-white mb-6">
+                    Built by gamers,<br /><span class="text-primary neon-text">for gamers.</span>
+                </h2>
+                <p class="text-slate-400 text-lg max-w-2xl mx-auto leading-relaxed">
+                    AURA was born in a late-night gaming session. We were frustrated with laggy voice, privacy leaks,
+                    and toxic lobbies. So we built the platform we always wanted.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center mb-24">
+                <div class="space-y-8 reveal">
+                    <div class="flex gap-5 items-start">
+                        <div
+                            class="w-12 h-12 shrink-0 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center text-primary">
+                            <span class="material-symbols-outlined">rocket_launch</span>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-bold text-white mb-2">Founded in 2022</h3>
+                            <p class="text-slate-400 leading-relaxed text-sm">Three co-founders, one dorm room, and a
+                                shared belief that gaming deserved better infrastructure. We shipped our first beta in
+                                90 days.</p>
+                        </div>
+                    </div>
+                    <div class="flex gap-5 items-start">
+                        <div
+                            class="w-12 h-12 shrink-0 rounded-xl bg-neon/10 border border-neon/20 flex items-center justify-center text-neon">
+                            <span class="material-symbols-outlined">public</span>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-bold text-white mb-2">Global from Day One</h3>
+                            <p class="text-slate-400 leading-relaxed text-sm">Edge nodes across 6 continents ensure no
+                                gamer is ever far from a relay. We latency-obsess so you don't have to.</p>
+                        </div>
+                    </div>
+                    <div class="flex gap-5 items-start">
+                        <div
+                            class="w-12 h-12 shrink-0 rounded-xl bg-accent/10 border border-accent/20 flex items-center justify-center text-accent">
+                            <span class="material-symbols-outlined">favorite</span>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-bold text-white mb-2">Community First</h3>
+                            <p class="text-slate-400 leading-relaxed text-sm">Every feature is voted on by our Discord
+                                community of 2M+ members. We ship what players actually need, not what investors think
+                                they want.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4 reveal">
+                    <div class="about-stat-card col-span-2">
+                        <div class="text-4xl font-extrabold font-display text-white mb-1">50M<span
+                                class="text-primary">+</span></div>
+                        <div class="text-slate-400 text-sm font-medium">Registered Users Worldwide</div>
+                        <div class="mt-4 h-1 rounded-full bg-slate-800 overflow-hidden">
+                            <div class="h-full rounded-full bg-gradient-to-r from-primary to-neon" style="width: 82%">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="about-stat-card">
+                        <div class="text-3xl font-extrabold font-display text-neon mb-1">6</div>
+                        <div class="text-slate-400 text-xs font-medium">Continents Covered</div>
+                        <span
+                            class="material-symbols-outlined text-neon/30 text-4xl absolute bottom-3 right-3">public</span>
+                    </div>
+                    <div class="about-stat-card">
+                        <div class="text-3xl font-extrabold font-display text-accent mb-1">12ms</div>
+                        <div class="text-slate-400 text-xs font-medium">Avg Global Latency</div>
+                        <span
+                            class="material-symbols-outlined text-accent/30 text-4xl absolute bottom-3 right-3">bolt</span>
+                    </div>
+                    <div class="about-stat-card">
+                        <div class="text-3xl font-extrabold font-display text-primary mb-1">2M<span
+                                class="text-white text-lg">+</span></div>
+                        <div class="text-slate-400 text-xs font-medium">Community Members</div>
+                        <span
+                            class="material-symbols-outlined text-primary/30 text-4xl absolute bottom-3 right-3">groups_3</span>
+                    </div>
+                    <div class="about-stat-card">
+                        <div class="text-3xl font-extrabold font-display text-white mb-1">4<span
+                                class="text-primary text-lg">yrs</span></div>
+                        <div class="text-slate-400 text-xs font-medium">Building & Iterating</div>
+                        <span
+                            class="material-symbols-outlined text-white/20 text-4xl absolute bottom-3 right-3">history</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="reveal overflow-hidden border-t border-b border-white/5 py-6">
+                <p class="text-center text-xs uppercase tracking-widest text-slate-600 mb-5 font-semibold">Trusted by
+                    squads playing</p>
+                <div
+                    class="flex overflow-hidden [mask-image:linear-gradient(to_right,transparent,white_20%,white_80%,transparent)]">
+                    <div class="marquee-track">
+                        <span class="text-slate-500 font-bold text-sm px-4">VALORANT</span>
+                        <span class="text-slate-600">·</span>
+                        <span class="text-slate-500 font-bold text-sm px-4">LEAGUE OF LEGENDS</span>
+                        <span class="text-slate-600">·</span>
+                        <span class="text-slate-500 font-bold text-sm px-4">APEX LEGENDS</span>
+                        <span class="text-slate-600">·</span>
+                        <span class="text-slate-500 font-bold text-sm px-4">MINECRAFT</span>
+                        <span class="text-slate-600">·</span>
+                        <span class="text-slate-500 font-bold text-sm px-4">FORTNITE</span>
+                        <span class="text-slate-600">·</span>
+                        <span class="text-slate-500 font-bold text-sm px-4">CALL OF DUTY</span>
+                        <span class="text-slate-600">·</span>
+                        <span class="text-slate-500 font-bold text-sm px-4">COUNTER-STRIKE 2</span>
+                        <span class="text-slate-600">·</span>
+                        <span class="text-slate-500 font-bold text-sm px-4">OVERWATCH 2</span>
+                        <span class="text-slate-600">·</span>
+                        <span class="text-slate-500 font-bold text-sm px-4">VALORANT</span>
+                        <span class="text-slate-600">·</span>
+                        <span class="text-slate-500 font-bold text-sm px-4">LEAGUE OF LEGENDS</span>
+                        <span class="text-slate-600">·</span>
+                        <span class="text-slate-500 font-bold text-sm px-4">APEX LEGENDS</span>
+                        <span class="text-slate-600">·</span>
+                        <span class="text-slate-500 font-bold text-sm px-4">MINECRAFT</span>
+                        <span class="text-slate-600">·</span>
+                        <span class="text-slate-500 font-bold text-sm px-4">FORTNITE</span>
+                        <span class="text-slate-600">·</span>
+                        <span class="text-slate-500 font-bold text-sm px-4">CALL OF DUTY</span>
+                        <span class="text-slate-600">·</span>
+                        <span class="text-slate-500 font-bold text-sm px-4">COUNTER-STRIKE 2</span>
+                        <span class="text-slate-600">·</span>
+                        <span class="text-slate-500 font-bold text-sm px-4">OVERWATCH 2</span>
+                        <span class="text-slate-600">·</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== TEAM SECTION ========== -->
+    <section id="team" class="relative py-32 border-t border-white/5 team-section-bg overflow-hidden">
+        <div class="absolute inset-0 opacity-30"
+            style="background-image: radial-gradient(circle, rgba(139,92,246,0.15) 1px, transparent 1px); background-size: 40px 40px;">
+        </div>
+
+        <div class="max-w-7xl mx-auto px-6 relative z-10">
+            <!-- Header -->
+            <div class="text-center mb-20 reveal">
+                <div class="about-pill mb-6">
+                    <span class="material-symbols-outlined text-sm">group</span>
+                    Meet the Crew
+                </div>
+                <h2 class="font-display text-4xl md:text-6xl font-extrabold tracking-tight text-white mb-6">
+                    The minds behind<br /><span class="text-neon"
+                        style="text-shadow: 0 0 20px rgba(0,242,255,0.4);">AURA.</span>
+                </h2>
+                <p class="text-slate-400 text-lg max-w-xl mx-auto">
+                    A small, obsessed team of engineers, designers, and gamers who never settle for "good enough."
+                </p>
+            </div>
+
+            <!-- Team Grid -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
+
+                <!-- Member 1 -->
+                <div class="team-card p-7 text-center reveal">
+                    <div class="team-card-glow"></div>
+                    <div class="team-avatar-ring">
+                        <div class="team-avatar-inner" style="background: linear-gradient(135deg, #1e1b4b, #2e1065);">
+                            <span class="font-display text-white font-extrabold">AZ</span>
+                        </div>
+                    </div>
+                    <span class="team-role-badge bg-primary/15 text-primary border border-primary/20">Co-Founder ·
+                        CEO</span>
+                    <h3 class="text-lg font-bold text-white mt-3 mb-1">Ali Arzavi</h3>
+                    <p class="text-slate-500 text-xs leading-relaxed mb-4">Ex-Riot Games engineer. Obsessed with
+                        distributed systems and 1v1 duels.</p>
+                    <div class="flex justify-center gap-2">
+                        <a href="#" class="team-social-link text-slate-400">
+                            <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24">
+                                <path
+                                    d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z" />
+                            </svg>
+                        </a>
+                        <a href="#" class="team-social-link text-slate-400">
+                            <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24">
+                                <path
+                                    d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Member 2 -->
+                <div class="team-card p-7 text-center reveal" style="transition-delay: 0.1s">
+                    <div class="team-card-glow"></div>
+                    <div class="team-avatar-ring">
+                        <div class="team-avatar-inner" style="background: linear-gradient(135deg, #064e3b, #065f46);">
+                            <span class="font-display text-white font-extrabold">HF</span>
+                        </div>
+                    </div>
+                    <span class="team-role-badge bg-neon/10 text-neon border border-neon/20">Co-Founder · CTO</span>
+                    <h3 class="text-lg font-bold text-white mt-3 mb-1">Human farshadfar</h3>
+                    <p class="text-slate-500 text-xs leading-relaxed mb-4">Audio DSP wizard. Wrote AURA's spatial engine
+                        from scratch in a weekend.</p>
+                    <div class="flex justify-center gap-2">
+                        <a href="#" class="team-social-link text-slate-400">
+                            <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24">
+                                <path
+                                    d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z" />
+                            </svg>
+                        </a>
+                        <a href="#" class="team-social-link text-slate-400">
+                            <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24">
+                                <path
+                                    d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12" />
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Member 3 -->
+                <div class="team-card p-7 text-center reveal" style="transition-delay: 0.2s">
+                    <div class="team-card-glow"></div>
+                    <div class="team-avatar-ring">
+                        <div class="team-avatar-inner" style="background: linear-gradient(135deg, #431407, #7c2d12);">
+                            <span class="font-display text-white font-extrabold">JM</span>
+                        </div>
+                    </div>
+                    <span class="team-role-badge bg-accent/10 text-accent border border-accent/20">Design Lead</span>
+                    <h3 class="text-lg font-bold text-white mt-3 mb-1">Jordan Miles</h3>
+                    <p class="text-slate-500 text-xs leading-relaxed mb-4">Pixel perfectionist. Responsible for every
+                        gradient, glow, and animation you see here.</p>
+                    <div class="flex justify-center gap-2">
+                        <a href="#" class="team-social-link text-slate-400">
+                            <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24">
+                                <path
+                                    d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z" />
+                            </svg>
+                        </a>
+                        <a href="#" class="team-social-link text-slate-400">
+                            <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24">
+                                <path
+                                    d="M7.75 2h8.5C19.097 2 21 3.903 21 7.75v8.5C21 20.097 19.097 22 16.25 22h-8.5C4.903 22 3 20.097 3 16.25v-8.5C3 3.903 4.903 2 7.75 2zm0 1.5C5.955 3.5 4.5 4.955 4.5 7.75v8.5c0 2.795 1.455 4.25 3.25 4.25h8.5c2.795 0 4.25-1.455 4.25-4.25v-8.5c0-2.795-1.455-4.25-4.25-4.25h-8.5zM12 7a5 5 0 110 10 5 5 0 010-10zm0 1.5a3.5 3.5 0 100 7 3.5 3.5 0 000-7zm4.75-.88a1.12 1.12 0 11-2.24 0 1.12 1.12 0 012.24 0z" />
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Member 4 -->
+                <div class="team-card p-7 text-center reveal" style="transition-delay: 0.3s">
+                    <div class="team-card-glow"></div>
+                    <div class="team-avatar-ring">
+                        <div class="team-avatar-inner" style="background: linear-gradient(135deg, #0c4a6e, #075985);">
+                            <span class="font-display text-white font-extrabold">NP</span>
+                        </div>
+                    </div>
+                    <span class="team-role-badge bg-slate-700/40 text-slate-300 border border-white/10">Head of
+                        Security</span>
+                    <h3 class="text-lg font-bold text-white mt-3 mb-1">Nadia Park</h3>
+                    <p class="text-slate-500 text-xs leading-relaxed mb-4">Ex-NSA. Keeps your voice chats locked tighter
+                        than a Vault 13 bunker.</p>
+                    <div class="flex justify-center gap-2">
+                        <a href="#" class="team-social-link text-slate-400">
+                            <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24">
+                                <path
+                                    d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z" />
+                            </svg>
+                        </a>
+                        <a href="#" class="team-social-link text-slate-400">
+                            <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24">
+                                <path
+                                    d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Join the team CTA -->
+            <div class="reveal text-center">
+                <div
+                    class="inline-flex items-center gap-4 bg-slate-900/60 border border-white/8 rounded-2xl px-8 py-5 backdrop-blur-xl">
+                    <div class="flex -space-x-2">
+                        <div class="w-8 h-8 rounded-full border-2 border-slate-900 flex items-center justify-center text-xs font-bold"
+                            style="background: linear-gradient(135deg,#7c3aed,#4f46e5)">+</div>
+                        <div class="w-8 h-8 rounded-full border-2 border-slate-900 flex items-center justify-center text-xs font-bold"
+                            style="background: linear-gradient(135deg,#0f766e,#0891b2)">?</div>
+                    </div>
+                    <span class="text-slate-300 text-sm font-medium">We're hiring across engineering & design.</span>
+                    <a href="#"
+                        class="bg-primary hover:bg-primary/80 text-white text-sm font-bold px-5 py-2 rounded-full transition-all shadow-[0_0_15px_rgba(139,92,246,0.3)]">
+                        View Openings →
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- STATS -->
     <section class="py-32 border-t border-white/5">
         <div class="max-w-7xl mx-auto px-6 text-center">
             <h2 class="font-display text-4xl font-bold mb-16 tracking-tight">Ecosystem Stats</h2>
@@ -436,24 +804,18 @@
             </div>
         </div>
     </section>
+
+    <!-- FOOTER -->
     <footer class="py-20 border-t border-white/5">
         <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-10">
-
-            <!-- Logo -->
             <div class="flex items-center gap-2">
                 <div class="w-8 h-8 bg-primary rounded-lg flex items-center justify-center text-white">
                     <span class="material-symbols-outlined text-lg font-bold">bolt</span>
                 </div>
                 <span class="font-display text-xl font-extrabold tracking-tighter text-neon neon-logo">AURA</span>
             </div>
-
-            <!-- Copyright -->
             <p class="text-slate-500 text-sm font-medium">© 2026 AURA INTERACTIVE. ALL RIGHTS RESERVED.</p>
-
-            <!-- Social Icons -->
             <div class="flex gap-6">
-
-                <!-- X (Twitter) -->
                 <a href="https://x.com/username" target="_blank" rel="noopener noreferrer"
                     class="hover:text-primary transition-colors">
                     <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
@@ -461,8 +823,6 @@
                             d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z" />
                     </svg>
                 </a>
-
-                <!-- Instagram -->
                 <a href="https://instagram.com/username" target="_blank" rel="noopener noreferrer"
                     class="hover:text-primary transition-colors">
                     <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
@@ -470,8 +830,6 @@
                             d="M7.75 2h8.5C19.097 2 21 3.903 21 7.75v8.5C21 20.097 19.097 22 16.25 22h-8.5C4.903 22 3 20.097 3 16.25v-8.5C3 3.903 4.903 2 7.75 2zm0 1.5C5.955 3.5 4.5 4.955 4.5 7.75v8.5c0 2.795 1.455 4.25 3.25 4.25h8.5c2.795 0 4.25-1.455 4.25-4.25v-8.5c0-2.795-1.455-4.25-4.25-4.25h-8.5zM12 7a5 5 0 110 10 5 5 0 010-10zm0 1.5a3.5 3.5 0 100 7 3.5 3.5 0 000-7zm4.75-.88a1.12 1.12 0 11-2.24 0 1.12 1.12 0 012.24 0z" />
                     </svg>
                 </a>
-
-                <!-- YouTube -->
                 <a href="https://youtube.com/username" target="_blank" rel="noopener noreferrer"
                     class="hover:text-primary transition-colors">
                     <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
@@ -479,162 +837,91 @@
                             d="M21.8 8s-.2-1.4-.8-2c-.8-.8-1.7-.8-2.1-.9C16.4 5 12 5 12 5s-4.4 0-6.9.1c-.4 0-1.3.1-2.1.9-.6.6-.8 2-.8 2S2 9.6 2 11.2v1.6c0 1.6.2 3.2.2 3.2s.2 1.4.8 2c.8.8 1.9.8 2.4.9 1.7.1 7.6.1 7.6.1s4.4 0 6.9-.1c.4 0 1.3-.1 2.1-.9.6-.6.8-2 .8-2s.2-1.6.2-3.2v-1.6c0-1.6-.2-3.2-.2-3.2zM10 15V9l5 3-5 3z" />
                     </svg>
                 </a>
-
-                <!-- Facebook -->
-                <a href="https://facebook.com/username" target="_blank" rel="noopener noreferrer"
-                    class="hover:text-primary transition-colors">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                        <path
-                            d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 5 3.657 9.128 8.438 9.878v-6.988h-2.54v-2.89h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562v1.875h2.773l-.443 2.89h-2.33V21.878C18.343 21.128 22 17 22 12z" />
-                    </svg>
-                </a>
             </div>
-
         </div>
         <div class="mt-10 flex justify-center w-full">
             <div id="lang-switch"
                 class="relative flex items-center w-40 h-12 bg-slate-800/40 rounded-full p-1 cursor-pointer select-none shadow-[0_0_15px_rgba(139,92,246,0.5)]">
                 <div id="lang-toggle-thumb"
                     class="absolute top-1 left-1 w-1/2 h-10 bg-primary rounded-full transition-all shadow-[0_0_10px_rgba(139,92,246,0.7)] flex items-center justify-center text-white font-bold neon-text">
-                    EN
-                </div>
+                    EN</div>
                 <span class="w-1/2 text-center text-white font-bold z-10 pointer-events-none">EN</span>
                 <span class="w-1/2 text-center text-white font-bold z-10 pointer-events-none">FA</span>
             </div>
         </div>
     </footer>
+
+    <!-- SCRIPTS -->
     <script>
-        //====================animation for language toggle and persian translation====================//
+        const cursorBg = document.getElementById("cursor-bg");
+        window.addEventListener("mousemove", (e) => {
+            cursorBg.style.setProperty("--mouse-x", (e.clientX / window.innerWidth * 100) + "%");
+            cursorBg.style.setProperty("--mouse-y", (e.clientY / window.innerHeight * 100) + "%");
+        });
+
         const langSwitch = document.getElementById("lang-switch");
         const langThumb = document.getElementById("lang-toggle-thumb");
-
         const savedLang = localStorage.getItem("site-lang") || "en";
         setLanguage(savedLang, false);
-
         langSwitch.addEventListener("click", () => {
             const newLang = document.documentElement.lang === "en" ? "fa" : "en";
             setLanguage(newLang, true);
             localStorage.setItem("site-lang", newLang);
         });
-
         function setLanguage(lang, animate) {
             document.documentElement.lang = lang;
-            document.documentElement.dir = (lang === "fa") ? "rtl" : "ltr";
-
-            if (lang === "fa") {
-                langThumb.style.left = "50%";
-                langThumb.textContent = "FA";
-            } else {
-                langThumb.style.left = "1px";
-                langThumb.textContent = "EN";
-            }
-
-            if (animate) {
-                langThumb.style.transition = "all 0.3s ease";
-            } else {
-                langThumb.style.transition = "none";
-            }
-
-            if (lang === "fa") {
-                translateToPersian();
-            } else {
-                translateToEnglish();
-            }
+            document.documentElement.dir = lang === "fa" ? "rtl" : "ltr";
+            langThumb.style.left = lang === "fa" ? "50%" : "1px";
+            langThumb.textContent = lang === "fa" ? "FA" : "EN";
+            langThumb.style.transition = animate ? "all 0.3s ease" : "none";
+            if (lang === "fa") translateToPersian(); else translateToEnglish();
         }
-
         function translateToPersian() {
             document.querySelector("h1").innerHTML = "هر آورا <span class='text-primary'>گروه</span> خود را پیدا می‌کند.";
             document.querySelector("p").textContent = "لایه ارتباطی با کیفیت بالا برای نسل بعدی گیمرها.";
         }
-
         function translateToEnglish() {
             document.querySelector("h1").innerHTML = "Where every <span class='text-primary'>aura</span> finds its squad.";
-            document.querySelector("p").textContent = "The high-fidelity communication layer for the next generation of gamers.";
+            document.querySelector("p").textContent = "The high-fidelity communication layer for the next generation of gamers. Low latency, crystal audio, and communities that never sleep.";
         }
-    </script>
-    <script>
-        const flicker = () => {
-            const offset = (Math.random() - 0.5) * 5;
-            cone.style.transform = `translateX(-50%) rotate(${offset}deg)`;
-            requestAnimationFrame(flicker);
-        };
-        flicker();
-    </script>
-    <script>
-        const cursorBg = document.getElementById("cursor-bg");
 
-        window.addEventListener("mousemove", (e) => {
-            const x = (e.clientX / window.innerWidth) * 100;
-            const y = (e.clientY / window.innerHeight) * 100;
-
-            cursorBg.style.setProperty("--mouse-x", x + "%");
-            cursorBg.style.setProperty("--mouse-y", y + "%");
-        });
-    </script>
-    <script>
         const lamp = document.getElementById('lamp-interactive');
         const ropePath = document.getElementById('rope-path');
         const section = document.getElementById('features');
         const litCards = document.querySelectorAll('.feature-card-lit');
         const cone = document.getElementById('spotlight-cone');
-        const numPoints = 20;
-        const ropeLengthTotal = 260;
+        const numPoints = 20, ropeLengthTotal = 260;
         const segmentLength = ropeLengthTotal / (numPoints - 1);
-        let points = [];
-        const gravity = 0.45;
-        const friction = 0.985;
-        const constraintIterations = 15;
-        let isDragging = false;
-        let mouseX = 0;
-        let mouseY = 0;
+        let points = [], isDragging = false, mouseX = 0, mouseY = 0;
+        const gravity = 0.45, friction = 0.985, constraintIterations = 15;
+
         function initPoints() {
             const startX = window.innerWidth / 2;
             points = [];
             for (let i = 0; i < numPoints; i++) {
-                points.push({
-                    x: startX,
-                    y: i * segmentLength,
-                    oldX: startX,
-                    oldY: i * segmentLength,
-                    fixed: i === 0
-                });
+                points.push({ x: startX, y: i * segmentLength, oldX: startX, oldY: i * segmentLength, fixed: i === 0 });
             }
         }
         function updatePhysics() {
             for (let p of points) {
                 if (!p.fixed) {
-                    const vx = (p.x - p.oldX) * friction;
-                    const vy = (p.y - p.oldY) * friction;
-                    p.oldX = p.x;
-                    p.oldY = p.y;
-                    p.x += vx;
-                    p.y += vy + gravity;
+                    const vx = (p.x - p.oldX) * friction, vy = (p.y - p.oldY) * friction;
+                    p.oldX = p.x; p.oldY = p.y; p.x += vx; p.y += vy + gravity;
                 }
             }
             if (isDragging) {
-                const lastPoint = points[numPoints - 1];
-                const rect = section.getBoundingClientRect();
-                lastPoint.x += (mouseX - lastPoint.x) * 0.5;
-                lastPoint.y += (mouseY - lastPoint.y) * 0.5;
+                const lp = points[numPoints - 1];
+                lp.x += (mouseX - lp.x) * 0.5; lp.y += (mouseY - lp.y) * 0.5;
             }
             for (let i = 0; i < constraintIterations; i++) {
                 for (let j = 0; j < numPoints - 1; j++) {
-                    const p1 = points[j];
-                    const p2 = points[j + 1];
-                    const dx = p2.x - p1.x;
-                    const dy = p2.y - p1.y;
+                    const p1 = points[j], p2 = points[j + 1];
+                    const dx = p2.x - p1.x, dy = p2.y - p1.y;
                     const dist = Math.sqrt(dx * dx + dy * dy);
                     const diff = (segmentLength - dist) / dist;
-                    const offsetX = dx * diff * 0.5;
-                    const offsetY = dy * diff * 0.5;
-                    if (!p1.fixed) {
-                        p1.x -= offsetX;
-                        p1.y -= offsetY;
-                    }
-                    if (!p2.fixed) {
-                        p2.x += offsetX;
-                        p2.y += offsetY;
-                    }
+                    const ox = dx * diff * 0.5, oy = dy * diff * 0.5;
+                    if (!p1.fixed) { p1.x -= ox; p1.y -= oy; }
+                    if (!p2.fixed) { p2.x += ox; p2.y += oy; }
                 }
             }
         }
@@ -642,119 +929,79 @@
             updatePhysics();
             let pathData = `M ${points[0].x} ${points[0].y}`;
             for (let i = 1; i < points.length - 2; i++) {
-                const xc = (points[i].x + points[i + 1].x) / 2;
-                const yc = (points[i].y + points[i + 1].y) / 2;
+                const xc = (points[i].x + points[i + 1].x) / 2, yc = (points[i].y + points[i + 1].y) / 2;
                 pathData += ` Q ${points[i].x} ${points[i].y}, ${xc} ${yc}`;
             }
             pathData += ` Q ${points[numPoints - 2].x} ${points[numPoints - 2].y}, ${points[numPoints - 1].x} ${points[numPoints - 1].y}`;
             ropePath.setAttribute('d', pathData);
-            const lastPoint = points[numPoints - 1];
-            const pPrev = points[numPoints - 2];
-            const angleRad = Math.atan2(lastPoint.y - pPrev.y, lastPoint.x - pPrev.x) - Math.PI / 2;
-            lamp.style.transform = `translate(${lastPoint.x - 40}px, ${lastPoint.y}px) rotate(${angleRad}rad)`;
-            updateCardMasks(lastPoint.x, lastPoint.y, angleRad);
+            const lp = points[numPoints - 1], pp = points[numPoints - 2];
+            const angleRad = Math.atan2(lp.y - pp.y, lp.x - pp.x) - Math.PI / 2;
+            lamp.style.transform = `translate(${lp.x - 40}px, ${lp.y}px) rotate(${angleRad}rad)`;
+
+            flickerPhase += 0.018;
+            const targetFlicker = Math.sin(flickerPhase) * 1.8;
+            currentFlicker += (targetFlicker - currentFlicker) * 0.08;
+            cone.style.transform = `translateX(-50%) rotate(${currentFlicker}deg)`;
+
+            updateCardMasks(lp.x, lp.y, angleRad);
             requestAnimationFrame(render);
         }
         function updateCardMasks(lampX, lampY, angleRad) {
             const sectionRect = section.getBoundingClientRect();
-            const beamLocalOffsetY = 40;
-            const beamOriginX = lampX + Math.sin(-angleRad) * beamLocalOffsetY;
-            const beamOriginY = lampY + Math.cos(angleRad) * beamLocalOffsetY;
-            const coneSpread = 0.6;
-            const coneDistance = 2000;
-            const baseAngle = angleRad + (Math.PI / 2);
-            const leftAngle = baseAngle - coneSpread;
-            const rightAngle = baseAngle + coneSpread;
+            const bOY = 40;
+            const bx = lampX + Math.sin(-angleRad) * bOY, by = lampY + Math.cos(angleRad) * bOY;
+            const coneSpread = 0.6, coneDist = 2000;
+            const base = angleRad + Math.PI / 2;
+            const la = base - coneSpread, ra = base + coneSpread;
             litCards.forEach(card => {
                 const wrapper = card.closest('.feature-card-wrapper');
-                const wrapperRect = wrapper.getBoundingClientRect();
-                const localX = beamOriginX - wrapperRect.left - window.scrollX;
-                const localY = (beamOriginY + sectionRect.top) - wrapperRect.top;
-                const x1 = localX + Math.cos(leftAngle) * coneDistance;
-                const y1 = localY + Math.sin(leftAngle) * coneDistance;
-                const x2 = localX + Math.cos(rightAngle) * coneDistance;
-                const y2 = localY + Math.sin(rightAngle) * coneDistance;
-                const maskValue = `polygon(${localX}px ${localY}px, ${x1}px ${y1}px, ${x2}px ${y2}px)`;
-                card.style.setProperty('--spotlight-mask', maskValue);
+                const wr = wrapper.getBoundingClientRect();
+                const lx = bx - wr.left - window.scrollX;
+                const ly = (by + sectionRect.top) - wr.top;
+                const x1 = lx + Math.cos(la) * coneDist, y1 = ly + Math.sin(la) * coneDist;
+                const x2 = lx + Math.cos(ra) * coneDist, y2 = ly + Math.sin(ra) * coneDist;
+                card.style.setProperty('--spotlight-mask', `polygon(${lx}px ${ly}px, ${x1}px ${y1}px, ${x2}px ${y2}px)`);
             });
         }
         function updateMousePos(e) {
             const rect = section.getBoundingClientRect();
-            mouseX = e.clientX;
-            mouseY = e.clientY - rect.top;
+            mouseX = e.clientX; mouseY = e.clientY - rect.top;
         }
-        lamp.addEventListener('mousedown', (e) => {
-            isDragging = true;
-            updateMousePos(e);
-            e.preventDefault();
-        });
-        window.addEventListener('mousemove', (e) => {
-            if (isDragging) {
-                updateMousePos(e);
-            }
-        });
-        window.addEventListener('mouseup', () => {
-            isDragging = false;
-        });
-        window.addEventListener('resize', () => {
-            initPoints();
-        });
-        initPoints();
-        render();
-        //=================end of lamp and rope animation=================//
-    </script>
+        lamp.addEventListener('mousedown', (e) => { isDragging = true; updateMousePos(e); e.preventDefault(); });
+        window.addEventListener('mousemove', (e) => { if (isDragging) updateMousePos(e); });
+        window.addEventListener('mouseup', () => { isDragging = false; });
+        window.addEventListener('resize', initPoints);
+        let flickerPhase = 0;
+        let currentFlicker = 0;
+        initPoints(); render();
 
-    <script>
+        const reveals = document.querySelectorAll('.reveal');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+        }, { threshold: 0.1 });
+        reveals.forEach(el => observer.observe(el));
         async function checkAuthStatus() {
             const token = localStorage.getItem("accessToken");
             const storedName = localStorage.getItem("username");
             const storedAvatar = localStorage.getItem("avatar");
-
-            if (token && storedName && !storedName.includes('@')) {
-                updateUserUI(storedName, storedAvatar);
-            }
-
+            if (token && storedName && !storedName.includes('@')) updateUserUI(storedName, storedAvatar);
             if (token) {
                 try {
-                    const response = await fetch('/api/auth/me', {
-                        method: 'GET',
-                        headers: {
-                            'Authorization': `Bearer ${token}`,
-                            'Content-Type': 'application/json'
-                        }
-                    });
-
-                    if (response.ok) {
-                        const data = await response.json();
-
-                        const realUsername = data.user.username && !data.user.username.includes('@')
-                            ? data.user.username
-                            : "Aura User";
-
-                        localStorage.setItem("username", realUsername);
-                        localStorage.setItem("avatar", data.user.avatar);
-
-                        updateUserUI(realUsername, data.user.avatar);
-                    } else if (response.status === 401 || response.status === 403) {
-                        handleLogout();
-                    }
-                } catch (error) {
-                    console.error("Connection error:", error);
-                }
+                    const res = await fetch('/api/auth/me', { method: 'GET', headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' } });
+                    if (res.ok) {
+                        const data = await res.json();
+                        const name = data.user.username && !data.user.username.includes('@') ? data.user.username : "Aura User";
+                        localStorage.setItem("username", name); localStorage.setItem("avatar", data.user.avatar);
+                        updateUserUI(name, data.user.avatar);
+                    } else if (res.status === 401 || res.status === 403) handleLogout();
+                } catch (err) { console.error("Connection error:", err); }
             }
         }
-
         function updateUserUI(name, avatarUrl) {
             const authSection = document.getElementById("auth-section");
-
             let cleanName = name;
-
-            if (!name || name.length > 15 || /^[a-z0-9]{8,}$/.test(name)) {
-                cleanName = "Explorer"; 
-            }
-
+            if (!name || name.length > 15 || /^[a-z0-9]{8,}$/.test(name)) cleanName = "Explorer";
             const finalAvatar = avatarUrl || `https://ui-avatars.com/api/?name=${cleanName}&background=8B5CF6&color=fff`;
-
             authSection.innerHTML = `
             <div class="group relative flex items-center gap-3 bg-slate-800/40 p-1 pr-4 rounded-full border border-white/10 hover:border-primary/50 transition-all cursor-pointer">
                 <img src="${finalAvatar}" alt="User" class="w-8 h-8 rounded-full border border-primary/50 shadow-[0_0_10px_rgba(139,92,246,0.4)]">
@@ -763,27 +1010,15 @@
                     <span class="text-sm font-bold text-white tracking-wide">${cleanName}</span>
                 </div>
                 <span class="material-symbols-outlined text-slate-500 text-sm group-hover:text-primary transition-colors">expand_more</span>
-                
                 <div class="absolute top-full right-0 mt-2 w-40 bg-slate-900 border border-white/10 rounded-xl shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 overflow-hidden">
-                    <a href="account.html" class="flex items-center gap-2 px-4 py-2.5 text-sm text-slate-300 hover:bg-white/5 transition-colors">
-                        <span class="material-symbols-outlined text-sm">person</span> Profile
-                    </a>
-                    <button onclick="handleLogout()" class="w-full flex items-center gap-2 px-4 py-2.5 text-sm text-red-400 hover:bg-red-500/10 transition-colors border-t border-white/5">
-                        <span class="material-symbols-outlined text-sm">logout</span> Logout
-                    </button>
+                    <a href="account.html" class="flex items-center gap-2 px-4 py-2.5 text-sm text-slate-300 hover:bg-white/5 transition-colors"><span class="material-symbols-outlined text-sm">person</span> Profile</a>
+                    <button onclick="handleLogout()" class="w-full flex items-center gap-2 px-4 py-2.5 text-sm text-red-400 hover:bg-red-500/10 transition-colors border-t border-white/5"><span class="material-symbols-outlined text-sm">logout</span> Logout</button>
                 </div>
-            </div>
-        `;
+            </div>`;
         }
-
-        function handleLogout() {
-            localStorage.clear(); 
-            window.location.reload();
-        }
-
+        function handleLogout() { localStorage.clear(); window.location.reload(); }
         document.addEventListener("DOMContentLoaded", checkAuthStatus);
     </script>
-
 </body>
 
 </html>
